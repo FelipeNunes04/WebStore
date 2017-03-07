@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load thumbnail pagination_tags locations_tags payment_tags %}
+{% block title %}Busca | {{ block.super }}{% endblock %}
+{% block id %}result-search{% endblock %}
+{% block class %}search{% endblock %}
+
+{% block content %}
+<div class="menu">
+    <h2>Busca</h2>
+    <p>Nosso sistema de busca foi elaborado para ser extremamente eficaz e preciso, fornecendo a você uma ferramenta de grande utilidade nas suas buscas. Sinta-se a vontade também para nos informar algo que não tenha encontrado.</p>
+    {# <form id="filter-form" action="{% url result_filter %}" method="get"> #}
+    {#  <fieldset class="activities"> #}
+    {#      <legend>Refine sua busca:</legend> #}
+    {#      <label class="border-top">» SEÇÃO</label> #}
+    {#      <input type="hidden" name="q" value="{{ request.GET.q }}" /> #}
+    {#      <input type="hidden" name="l" value="{{ request.GET.l }}" /> #}
+    {#      <input type="hidden" name="t" value="{{ request.GET.t }}" /> #}
+    {#      <ul> #}
+    {#              {% for activity in activities %} #}
+    {#                     <li><label class="inner" for="id_activity{{ activity.id }}"><input type="checkbox" id="id_activity{{ activity.id }}" value="{{ activity.id }}" name="activity">{{ activity.name }}</label> #}
+    {#                     <ul> #}
+    {#                         {% for option in activity.option_groups.all %} #}
+    {#                         <span>{{option.name}}</span> #}
+    {#                             {% for value in option.optionvalue_set.all %} #}
+    {#                                 <li><label for="id_{{ value.option_group }}{{ value.id }}"><input type="checkbox" id="id_{{ value.option_group }}{{ value.id }}" value="{{ value.id }}" name="option-value">{{ value.name }}</label></li> #}
+    {#                             {% endfor %} #}
+    {#                          {% endfor %} #}
+    {#                     </ul> #}
+    {#                     </li>  #}
+    {#              {% endfor %} #}
+    {#             </ul> #}
+    {#             <span class="border-bottom"></span> #}
+    {#             <div class="locale"> #}
+    {#                  {% if qs_list_area %} #}
+    {#                     <label class="border-top">» ÁREA</label> #}
+    {#                     <ul> #}
+    {#                         {% for l in qs_list_area %} #}
+    {#                          <li><label for="id_locale{{ l.id }}"><input type="checkbox" id="id_locale{{ l.id }}" value="{{ l.id }}" name="area">{{ l.name }}</label></li> #}
+    {#                      {% endfor %} #}
+    {#                  </ul> #}
+    {#                  <span class="border-bottom"></span> #}
+    {#              {% else %} #}
+    {#                  <label class="border-top">» LOCAL</label> #}
+    {#                     <ul> #}
+    {#                         {% get_root_city as search_city %} #}
+    {#                         {% for l in search_city %} #}
+    {#                              <li><label for="id_locale{{ l.id }}"><input type="checkbox" id="id_locale{{ l.id }}" value="{{ l.id }}" name="locale">{{ l.name }}</label></li> #}
+    {#                          {% endfor %} #}
+    {#                      </ul> #}
+    {#                      <span class="border-bottom"></span> #}
+    {#                  {% endif %} #}
+    {#             </div> #}
+    {#             <div class="payment"> #}
+    {#                 <label class="border-top">» FORMAS DE PAGAMENTO</label> #}
+    {#                 <ul> #}
+    {#                     {% get_root_payment as search_payment %} #}
+    {#                     {% for p in search_payment %} #}
+    {#                  <li><label for="id_payment{{ p.id }}"><input type="checkbox" id="id_payment{{ p.id }}" value="{{ p.id }}" name="payment">{{ p.name }}</label></li> #}
+    {#              {% endfor %} #}
+    {#          </ul> #}
+    {#          <span class="border-bottom"></span> #}
+    {#             </div> #}
+    {#  </fieldset> #}
+    {# </form> #}
+    {% include "appsite/suggestion.html" %}
+    {% include "appsite/facebook.html" %}
+</div>
+<div class="bg-top">
+	<div class="bg-bottom">
+		<div class="article">
+    		<div class="banner">
+    		   	<p class="breadcrumb">Você está em: <a href="/">Home</a> » Resultado da busca</p>
+    		   	<div class="carousel">
+			        <div id="slider" class="nivoSlider">
+            			{% for banner in qs_banner %}
+            			    {% if banner.target %}
+            				    <a href="{{ banner.link }}" target="_blank"><img src="{% thumbnail banner.image 640x212 crop %}" /></a>
+            				{% else %}
+            				    <a href="{{ banner.link }}"><img src="{% thumbnail banner.image 640x212 crop %}" /></a>
+            				{% endif %}
+            			{% endfor %}
+    			    </div>
+    			</div>
+    		</div>
+			<div id="results">
+				<h4>Resultado da busca</h4>
+				<p>Sua busca por <strong>{{ request.GET.q }}</strong> trouxe {{ count }} resultado{{ count|pluralize }}:</p>
+				<div class="bg-results-left" >
+					<div class="bg-results-right">
+						<form action="{% url result_search %}" method="get">
+							<p><label>Filtre os resultados:</label></p>
+							<ul>
+								<li><label><input id="all-types" type="checkbox" checked="checked" value="" name="t"/>Todos</label></li>
+								<li><label><input id="type-corporate" type="checkbox" value="comercio" name="t"/>Comércio ({{ commerce }})</label></li>
+								<li><label><input id="type-professional" type="checkbox" value="servico" name="t"/>Serviços ({{ service }})</label></li>
+								<li><label><input id="type-event" type="checkbox" value="evento" name="t"/>Eventos ({{ event }})</label></li>
+							</ul>
+						</form>
+					</div>
+				</div>
+				<div class="results">
+    				<ul class="results">
+                        {% autopaginate product_list 15 %}
+    				    {% for result in product_list %}
+            			    <li class="{% cycle 'odd' 'even' %}">
+
+            					<div class="img-logo">
+        							<img src="{% thumbnail result.object.image 97x75 %}" alt="{{ result.object.fancy_name }}"/>
+        						</div>
+            					<div class="text">
+            						<h2>{{ result.object.fancy_name|truncatewords:5 }}</h2>
+            						<p>{{ result.object.description|truncatewords:15 }}</p>
+            						<a href="{% url ads_detail_view slug=result.object.slug %}">MAIS INFORMAÇÕES</a>
+                                    {% if result.object.has_active_promotions %}
+                                        {% with result.object.promotion_set.all|first as p %}
+                                            <a href="{% url my_promotion_detail pk=p.id %}">Vizualizar Promoção</a>
+                                        {% endwith %}
+                                    {% endif %}
+            					</div>
+            					<div class="img-banner">
+            					    {% with result.object.photo_set.all|first as img %}
+        							    <img src="{% thumbnail img.photo 97x70 %}" alt="{{ img.name }}"/>
+        							{% endwith %}
+        						</div>
+        					</li>
+            			{% endfor %}
+            		</ul>
+                    {% paginate %}
+                </div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

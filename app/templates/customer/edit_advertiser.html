@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% block title %}Meu cadastro | {{ block.super }}{% endblock %}
+{% block id %}sign-up{% endblock %}
+{% block class %}search{% endblock %}
+{% block content %}
+    <div class="menu">
+    	<h2>Meu Cadastro</h2>
+    	<p>Nessa página você tem  total liberdade para modificar seus dados cadastrais e seu Avatar.</p>
+
+    	<ul class="links">
+    	    <li><a href="/">» Home</a></li>
+    	    <li><a class="active" href="#">» Meu cadastro</a></li>
+    	    <li><a href="{% url my_ads %}">» Meu(s) anúncio(s)</a></li>
+    	    <li><a href="{% url new_signature %}">» Novo anúncio</a></li>
+            <li><a href="{% url my_promotions %}">» Minha(s) Promoção(ões)</a></li>
+        </ul>
+        {% include "appsite/facebook.html" %}
+    </div>
+    <div class="bg-top">
+    	<div class="bg-bottom">
+    		<div class="article">
+    			<div class="banner">
+    				<p class="breadcrumb">Você está em: <a href="/">Home</a> » Meu cadastro</p>
+    			</div>
+    			<form action="{% url edit_registration %}" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+    			    {% csrf_token %}
+    			    <p class="help-text">Por favor, alterar os demais campos do formulário para atualizar seu cadastro. Os campos marcados com <span class="required">*</span> são obrigatórios:</p>
+
+    			    {% if form.errors %}
+				    <div class="error">
+				        <div class="top">
+					        <h3>Seu cadastro não foi efetivado.</h3>
+					        <p>Por favor, preencha os campos listados abaixo corretamente:</p>
+				        </div>
+				        <ul>
+    				        {% for field in form %}
+                                {% if field.errors %}<li><strong>{{ field.label }}</strong> {{ field.errors|striptags }}</li>{% endif %}
+    				        {% endfor %}
+				        </ul>
+				    </div>
+				    {% endif %}
+    			    <h2>Dados Profissionais</h2>
+    			    <div class="column">
+                         {{ form.responsible.label_tag }}<span class="required"> *</span>
+                         <div class="border-left">
+ 							<div class="border-right large">
+ 								{{ form.responsible}}
+ 							</div>
+ 						</div>
+                     </div>
+                     <div class="column">
+                        {{ form.birth_date.label_tag }}<span class="required"> *</span>
+                        <div class="border-left">
+							<div class="border-right medium">
+								{{ form.birth_date }}
+							</div>
+						</div>
+                    </div>
+    			    <div class="column">
+                        <label for="id_phone_area_code">Telefone comercial:</label> <span class="required"> * </span>
+                        <div class="border-left">
+    						<div class="border-right tiny">
+    							{{ form.area_phone }}
+    						</div>
+    					</div>
+    					<div class="border-left phone">
+    						<div class="border-right minimal">
+    							{{ form.phone }}
+    						</div>
+    					</div>
+                    </div>
+                    <div class="column">
+                        <label for="id_celphone_area_code">Telefone celular:</label>
+                        <div class="border-left">
+    						<div class="border-right tiny">
+    							{{ form.area_cell_phone }}
+    						</div>
+    					</div>
+    					<div class="border-left phone">
+    						<div class="border-right minimal">
+    							{{ form.cell_phone }}
+    						</div>
+    					</div>
+                    </div>
+                    <div class="row">
+                        <label for="id_phone_area_code">Avatar:</label>
+                        {% if profile.image %}
+        			        <span class="field"><img src="{% thumbnail profile.image 45x45 crop='smart' %}"></span>
+    			        {% else %}
+        			        <span class="field"><img src="{{ STATIC_URL }}img/avatar.jpg"></span>
+                        {% endif %}
+                        <p class="help-text">Tamanho máximo do arquivo 200Kb - Extensão PNG, JPG, JPEG</p>
+                        <input type="file" name="image" value="" id="id_image"/>
+                    </div>
+                    <h2>Endereço de cobrança</h2>
+                    <div class="small-column">
+                        <label for="id_zip_code">CEP:</label> <span class="required"> *</span>
+                        <div class="border-left">
+    						<div class="border-right small">
+    							{{ form.zip_code }}
+    						</div>
+    					</div>
+                    </div>
+                    <div class="row">
+                        <label for="id_address">Rua:</label> <span class="required"> *</span>
+                        <div class="border-left">
+    						<div class="border-right big">
+    							{{ form.address }}
+    						</div>
+    					</div>
+                    </div>
+                    <div class="small-column">
+                        <label for="id_number">Número:</label> <span class="required"> *</span>
+                        <div class="border-left">
+    						<div class="border-right small">
+    							{{ form.number }}
+    						</div>
+    					</div>
+                    </div>
+                    <div class="small-column">
+                        <label for="id_complement">Complemento:</label>
+                        <div class="border-left">
+    						<div class="border-right small">
+    							{{ form.complement }}
+    						</div>
+    					</div>
+                    </div>
+                    <div class="small-column">
+                        <label for="id_area">Bairro:</label> <span class="required"> *</span>
+                        <div class="border-left">
+    						<div class="border-right small">
+    							{{ form.area }}
+    						</div>
+    					</div>
+                    </div>
+                    <div class="small-column _state">
+                        <label for="id_state">Estado:</label> <span class="required"> *</span>
+                        {{ form.state }}
+                    </div>
+                    <div class="small-column">
+                        <label for="id_city">Cidade:</label> <span class="required"> *</span>
+                        <div class="border-left">
+    						<div class="border-right small">
+    							{{ form.city }}
+    						</div>
+    					</div>
+                    </div>
+                    <h2>Dados de acesso</h2>
+                    <div class="medium-column">
+                        <label for="id_email">E-mail:</label> <span class="required"> *</span>
+                        <div class="border-left">
+    						<div class="border-right regular">
+    							{{ form.email }}
+    						</div>
+    					</div>
+                    </div>
+                    <div class="password">
+                        <label for="id_password">Senha:</label> <span class="required"> *</span>
+                        <div class="border-left">
+    						<div class="border-right">
+    							{{ form.password }}
+    						</div>
+    					</div>
+                    </div>
+                    <div class="password">
+                        <label for="id_password_confirm">Confirmar senha:</label> <span class="required"> *</span>
+                        <div class="border-left">
+    						<div class="border-right ">
+    							{{ form.password2 }}
+    						</div>
+    					</div>
+                    </div>
+                    <input class="user" type="hidden" name="user" value="{{ request.user }}">
+                    <p class="submit "><input type="submit" value="SALVAR ALTERAÇÕES"/></p>
+                    <p class="help-text">* Senhas devem conter no mínimo 3 e no máximo 12 de caracteres alfanuméricos.</p>
+    			</form>
+    		</div>
+    		<div class="confirmation">
+    		    <div class="fancybox-confirmation">
+        	        <p class="question">Deseja salvar as alterações?</p>
+        	        <a href="#" class="yes">
+				        <span class="right">
+				            <span class="btn-yes">
+				                Sim
+				            </span>
+				        </span>
+				    </a>
+        	        <a href="#" class="no">
+				        <span class="right">
+				            <span class="btn-yes">
+				                Não
+				            </span>
+				        </span>
+				    </a>
+    	        </div>
+    	    </div>
+    	</div>
+    </div>
+{% endblock %}

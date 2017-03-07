@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block title %}Cadastro | {{ block.super }}{% endblock %}
+{% block id %}sign-up{% endblock %}
+{%block class%}search{% endblock %}
+
+{% block content %}
+	<div class="menu">
+		<h2>Cadastro </h2>
+		<p>Cadastre-se em nosso site e aproveite vantagens incríveis.</p>
+        
+		<h4>Vantagens em ser um membro</h4>
+		<p>Conheça algumas das vantagens:<br />
+        - Saiba tudo sobre o universo que você mais gosta.<br />
+        - Encontre os melhores lugares e profissionais de sua cidade e bairro.<br />
+        - Desfrute de descontos exclusivos.<br />
+        - Comunique-se com anunciantes e profissionais preferidos.<br />
+        - E o melhor de tudo. É GRÁTIS!<br />
+        - Tudo isso entre uma infinidade de outras vantagens.<br />
+        Cadastre-se e comprove!</p>
+        {% include "appsite/facebook.html" %}
+	</div>
+	<div class="bg-top">
+		<div class="bg-bottom">
+			<div class="article">
+				<div class="banner">
+					<p class="breadcrumb">Você está em: <a href="/">Home</a> » Cadastro</p>
+				</div>
+				<form action="" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+				     {% csrf_token %}
+				     <p class="help-text">Por favor, preencha os demais campos do formulário para efetuar seu cadastro. Os campos marcados com <span class="required">*</span> são obrigatórios:</p>
+				    <h2>Dados Pessoais</h2>
+				    {% if form.errors %}
+				    <div class="error">
+				        <div class="top">
+					        <h3>Seu cadastro não foi efetivado.</h3>
+					        <p>Por favor, preencha os campos listados abaixo corretamente:</p>
+				        </div>
+				        <ul>
+    				        {% for field in form %}
+                                {% if field.errors %}<li><strong>{{ field.label }}</strong> {{ field.errors|striptags }}</li>{% endif %}
+    				        {% endfor %}
+				        </ul>
+				    </div>
+				    {% endif %}
+				    <div class="column">
+				        <label for="id_name">Nome <span class="required">*</span></label>
+				        <div class="border-left">
+							<div class="border-right large">
+								{{ form.name }}
+							</div>
+						</div>
+				    </div>
+                    <div class="column">
+                        {{form.surname.label_tag}} <span class="required"> *</span>
+                        <div class="border-left">
+							<div class="border-right large">
+								{{form.surname}}
+							</div>
+						</div>   
+                    </div>
+                   
+                     <div class="row">
+                        {{ form.birth_date.label_tag }} <span class="required">*</span>
+                        <div class="border-left">
+							<div class="border-right medium">
+								{{ form.birth_date}}
+							</div>
+						</div>   
+                    </div>    
+                     <div class="row">
+                        {{ form.gender.label_tag }} <span class="required">*</span>
+						{{ form.gender}}
+                    </div>
+                    <div class="row">
+                        <label for="id_phone_area_code">Avatar:</label><br />
+                        <span class="field"><img src="{{ STATIC_URL }}img/avatar.jpg"></span>
+                        <p class="help-text">Tamanho máximo do arquivo 200Kb - Extensão PNG, JPG, JPEG</p>
+                        <input type="file" name="image" value="" id="id_image"/>
+                    </div>
+                    <h2>Endereço <em class="sign-up">(não obrigatório)</em></h2>
+                    <div class="small-column">
+                        {{ form.zip_code.label_tag }}
+                        <div class="border-left">
+							<div class="border-right small">
+								{{ form.zip_code }}
+							</div>
+						</div>   
+                    </div>
+                    <div class="row">
+                        {{ form.address.label_tag }}
+                        <div class="border-left">
+							<div class="border-right big">
+								{{ form.address }}
+							</div>
+						</div>   
+                    </div>    
+                    <div class="small-column">
+                        {{form.number.label_tag}}
+                        <div class="border-left">
+							<div class="border-right small">
+								{{ form.number }}
+							</div>
+						</div>   
+                    </div>
+                    <div class="small-column">
+                        {{ form.complement.label_tag }}
+                        <div class="border-left">
+							<div class="border-right small">
+								{{ form.complement }}
+							</div>
+						</div>   
+                    </div>
+                    <div class="small-column">
+                        {{ form.area.label_tag }}
+                        <div class="border-left">
+							<div class="border-right small">
+								{{ form.area }}
+							</div>
+						</div>   
+                    </div>
+                    <div class="small-column _state">
+                        {{ form.state.label_tag }}
+                        {{ form.state }}
+                    </div>
+
+                    <div class="small-column">
+                        {{ form.city.label_tag }}
+                        <div class="border-left">
+							<div class="border-right small">
+								{{ form.city }}
+							</div>
+						</div>   
+                    </div>
+
+                    <h2>Áreas de interesse</h2>
+                    <div id="interest" class="row tiny">
+                        {{ form.interest_area }}
+                    </div>
+                    <div id="interest" class="row tiny">
+                        {{ form.newsletter }}{{ form.newsletter.label_tag }}
+                    </div>
+                    <h2>Dados de acesso</h2>
+                    <div class="medium-column">
+                        {{ form.email.label_tag }}<span class="required"> *</span>
+                        <div class="border-left">
+							<div class="border-right regular">
+								{{ form.email }}
+							</div>
+						</div>   
+                    </div>
+                     <div class="password">
+                        {{ form.password.label_tag }}<span class="required"> *</span>
+                        <div class="border-left">
+							<div class="border-right">
+								{{ form.password }}
+							</div>
+						</div>   
+                    </div>
+                     <div class="password">
+                        {{ form.check_password.label_tag }}<span class="required"> *</span>
+                        <div class="border-left">
+							<div class="border-right ">
+								{{ form.check_password }}
+							</div>
+						</div>   
+                    </div>
+                    <p class="submit"><input type="submit" value="ENVIAR CADASTRO"/></p>
+                    <p class="help-text">* Senhas devem conter no mínimo 3 e no máximo 12 de caracteres alfanuméricos.</p>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}

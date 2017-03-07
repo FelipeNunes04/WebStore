@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Termos de uso | {{ block.super }}{% endblock %}
+{% block rel %}{{ ad.category.slug|lower }}{% endblock %}
+{% block id %}terms{% endblock %}
+{% block class %}text{% endblock %}
+
+{% block content %}
+    <div class="bg-bottom">
+		<p class="breadcrumb">Você está em: <a href="/">Home</a> » Termos de uso</p>
+		<div class="article">
+			<h3>Termos de uso</h3>
+            <!-- <img src="{{ STATIC_URL }}img/privacy.png" alt="privacidade" /> -->
+            <div class="text">
+                <!-- <h4>Subtítulo</h4> -->
+                {{ terms.text|linebreaks }}     
+            </div>
+			<div class="clear"></div>
+		</div>
+		<div class="article">
+            <!-- <h4>Subtítulo</h4> -->
+			<div class="column first">
+				<p></p>
+			</div>
+			<div class="column">
+				<p></p>
+			</div>
+			<div class="clear"></div>
+		</div>
+    </div>
+{% endblock %}

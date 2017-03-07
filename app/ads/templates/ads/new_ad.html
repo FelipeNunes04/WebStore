@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+{% load thumbnail youtubizer %}
+{% block title %}Novo anúnico | {{ block.super }}{% endblock %}
+{% block rel %}{{ ad.category.slug|lower }}{% endblock %}
+{% block id %}edit-ad{% endblock %}
+{% block class %}search new-ad{% endblock %}
+
+{% block content %}
+<div class="menu">
+	<h2>Meu Cadastro</h2>
+	<p>Lorem ipsum dolor sit amet, adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore.</p>
+
+	<ul class="links">
+		<li><a href="/">» Home</a></li>
+		<li><a href="{% url edit_registration %}">» Meu cadastro</a></li>
+		<li><a class="active" href="{% url my_ads %}">» Meu(s) anúncio(s)</a></li>
+		<li><a href="{% url new_signature %}">» Novo anúncio</a></li>
+		<li><a href="{% url my_promotions %}">» Minha(s) Promoção(ões)</a></li>
+	</ul>
+{% include "appsite/facebook.html" %}
+</div>
+<div class="bg-top">
+	<div class="bg-bottom">
+		<div class="article">
+			<form action="" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+				{% csrf_token %}
+				{{ hidden_form.management_form }}
+				<div class="banner">
+					<p class="breadcrumb">Você está em: <a href="/">Home</a> » <a href="{% url my_ads %}">Meu(s) anúncio(s)</a> » <a href="#">Novo anúncio</a></p>
+					{% if messages %}
+						<div class="data">
+							{% for message in messages %}
+								 <p class="{{ message.tags }} signature">{{ message }}</p>
+							{% endfor %}
+						</div>
+					{% endif %}
+					{% if form.errors %}
+					<div class="error">
+						<div class="top">
+							<h3>Suas alterações não foram efetivadas.</h3>
+							<p>Por favor, preencha os campos listados abaixo corretamente:</p>
+						</div>
+						<ul>
+							{% for field in form %}
+								{% if field.errors %}<li><strong>{{ field.label }}</strong> {{ field.errors|striptags }}</li>{% endif %}
+							{% endfor %}
+						</ul>
+					</div>
+					{% endif %}
+
+					<div class="text">
+						<div class="border">
+							<div class="content">
+								<div class="logo ">
+									{% if form.data.image %}
+										<img id="image-logo" src="{% thumbnail form.data.image 194x194 %}" alt="{{ form.data.slug }}"/>
+									{% else %}
+										<img id="image-logo" src="{{ STATIC_URL }}img/bg/bg_logo_ad.png" alt="{{ form.data.slug }}"/>
+									{% endif %}
+									<div class="help-logo">
+										<p class="help-text">Tamanho recomendado 194px por 194px</p>
+										<p class="required">Logo é obrigatório.</p>
+										<p class="required">Tamanho máximo 200kb</p>
+									</div>
+									<div class="success-logo">
+										<p class="help-text">Imagem carregada com sucesso.</p>
+									</div>
+
+								</div>
+								<input type="text" value="{{ form.data.fancy_name }}" name="fancy_name"	 id="title" placeholder="Nome fantasia (obrigatório)"/>
+								<textarea name="description" rows="8" cols="40" placeholder="Descrição da empresa (obrigatório)">{{ form.data.description }}</textarea>
+								<div class="links">
+									<label for="url">Site</label>{{ form.site }}
+									<label for="facebook">Facebook</label>{{ form.facebook }}
+									<label for="twitter">Twitter</label>{{ form.twitter }}
+									<label for="facebook">Assinatura</label>{{ form.signature }}
+								</div>
+								<a href="#imagem-exibicao" class="orange lightbox">
+									<span class="left"><span class="text">ESCOLHER LOGO</span>
+								</a>
+							</div><!-- content -->
+						</div><!-- border -->
+					</div><!-- text -->
+				</div><!-- banner -->
+				<div id="gallery">
+					<h3>Galeria de fotos</h3>
+					<ul>
+						{% for hform in hidden_form %}
+							{% if hform.data.photo_set %}
+								<li><a class="lightbox-gallery" href="{{ hform.data.photo.url }}" rel="galeria"><img src="{% thumbnail hform.data.photo 104x86 crop %}" alt="{{ hform.data.name }}" /></a></li>
+							{% else %}
+								<li><a class="lightbox-gallery" href="{{ STATIC_URL }}img/bg/bg_photo_ad.png" rel="galeria"><img src="{{ STATIC_URL }}img/bg/bg_photo_ad.png" alt="sua imagem aqui" /></a></li>
+							{% endif %}
+						{% endfor %}
+					</ul>
+					<a href="#adicionar-imagem" class="orange lightbox">
+						<span class="left"><span class="text">
+							ADICIONAR IMAGEM
+						</span></span>
+					</a>
+				</div>
+				<div id="video">
+					<h3>Vídeo</h3>
+					{% if form.data.video %}
+						{{ form.data.video|youtubize:"275x170"|safe }}
+					{% else %}
+						<img src="{{ STATIC_URL }}img/bg/bg_video.jpg">
+					{% endif %}
+					<p class="success">Video carregado com sucesso.</p>
+					<a href="#alterar-video" class="orange lightbox">
+						<span class="left"><span class="text">
+							ESCOLHER VÍDEO
+						</span></span>
+					</a>
+				</div>
+				<div class="clear"></div>
+				<div id="contact">
+					<h3>Entre em contato <span>(itens com * são obrigatórios)</span></h3>
+					<div id="address">
+						<input type="text" name="zip_code" value="{{ form.data.zip_code }}" id="id_zip_code" placeholder="CEP *"/>
+						<input type="text" name="street" value="{{ form.data.street }}" id="id_street" placeholder="Av., rua, etc... *"/>
+						<input type="text" name="number" value="{{ form.data.number }}" id="id_number" placeholder="Número *"/>
+						<input type="text" name="complement" value="{{ form.data.complement }}" id="id_complement" placeholder="Complemento"/>
+						<div class="ad-state">{{ form.state }}</div>
+						<div class="ad-city">{{ form.city }}</div>
+						<div class="ad-area">{{ form.area }}</div>
+						<input type="text" name="country" value="Brasil" id="id_country" placeholder="País"/>
+						<textarea name="time_working" id="id_time_working" rows="8" cols="40" placeholder="Horário de funcionamento">{{ form.data.time_working }}</textarea>
+					</div>
+					<div id="map">
+						<div id="map-canvas" >
+							<img src="http://maps.google.com/maps/api/staticmap?center=Avenida+Presidente+Vargas,2121,Ribeirao+Preto,SP&amp;zoom=14&amp;size=275x165&amp;maptype=roadmap&markers=-21.206029,-47.810933&amp;sensor=false">
+						</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div id="field">
+				   <div id="categories">
+					   <h2>Categorias * <em>(selecione a categoria deste anúncio)</em></h2>
+						{{form.category}}
+					   <div class="clear"></div>
+				   </div>
+					<div id="activities" class="hidden">
+						 <h2>Seções * <em>(selecione a seção deste anúncio)</em></h2>
+						 <ul></ul>
+
+						<div class="clear"></div>
+					</div>
+				   <div id="values" class="hidden">
+					   <h2>Características * <em>(selecione as caracteristicas deste anúncio)</em></h2>
+					   <ul></ul>
+
+					   <div class="clear"></div>
+				   </div>
+					<h2>Formas de pagamento aceitas por você</h2>
+					{{ form.payment }}
+					<div class="clear"></div>
+				</div>
+				<div id="extras">
+					<span>Tipo de anúncio *</span>
+					{{ form.type_ad }}
+				</div>
+				<div class="display-none"><label class="is_active" for="id_is_active">Anúncio ativo</label>{{ form.is_active }}</div>
+				<div class="line">
+					<a href="{% url my_ads %}" class="grey">
+						<span class="left"><span class="text">
+							CANCELAR ALTERAÇÕES
+						</span></span>
+					</a>
+					{{ form.image }}
+					{{ form.video }}
+					<div class="hidden">
+						{% for hform in hidden_form %}
+							{{ hform.id }}
+							{{ hform.photo }}
+						{% endfor %}
+					</div>
+					<span class="hidden">0</span>
+					<input type="submit" value="CRIAR ANÚNCIO">
+				</div>
+			</form>
+			<div class="clear"></div>
+		</div><!-- div.article -->
+	</div><!-- div.bg-bottom -->
+</div><!-- div.bg-top -->
+
+<div id="fancybox" >
+	<div id="imagem-exibicao" class="lightbox">
+		<h2>Adicionar  nova	 imagem	 de	 exibição:</h2>
+		<form action="{% url ad_image_upload %}" method="post" target="uploader" enctype="multipart/form-data"	accept-charset="utf-8">
+			{% csrf_token %}
+			<label for="id_image">Procure a imagem de exibição em seu computador:</label>
+			<div class="help-logo">
+				<p class="help-text">Tamanho recomendado 194px por 194px</p>
+				<p class="help-text">Tamanho máximo 200kb</p>
+			</div>
+			<div class="success">
+				<p class="help-text">Imagem carregada com sucesso.</p>
+			</div>
+			<div class="error hidden">
+				<img src="{{ STATIC_URL }}img/bg/bg_alert.png" alt="alert" />
+				<span>Imagem de exibição invalida. Por favor, procure uma nova imagem de exibição.</span>
+			</div>
+			<input type="file" name="image" /><div class="loading"></div>
+			<input type="submit" value="SALVAR LOGO"/>
+		</form>
+		<span class="close">Fechar</span>
+	</div>
+
+	<div id="alterar-video" class="lightbox">
+		<h2>Alterar vídeo:</h2>
+		<form action="." method="post" accept-charset="utf-8">
+			{% csrf_token %}
+			<label for="video_url">Informe no campo abaixo a url do seu vídeo no Youtube ou no Vimeo:</label>
+			<div class="border-left regular">
+				<div class="border-right">
+					<input type="text" name="video" value="{{ form.data.video }}"/>
+				</div>
+			</div>
+			<span class="help-text">Ex.: www.youtube.com/watch?v=Mscuqsos </span>
+			<input type="submit" value="SALVAR VÍDEO"/><div class="loading"></div>
+		</form>
+
+		<span class="close">Fechar</span>
+	</div>
+
+
+	<div id="adicionar-imagem" class="lightbox">
+		<h2>Adicionar  nova	 imagem:</h2>
+		<form action="{% url ad_photos_upload %}" target="uploader" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+			{% csrf_token %}
+			{{ photo_form.management_form }}
+
+			<label for="imagem_galeria">Selecione a imagem em seu computador:</label>
+
+			<p class="success0">Foto carregada com sucesso.</p>
+			<span class="input-file">
+				<span class="val"></span>
+				<input id="id_photo_set-0-photo" type="file" name="photo_set-0-photo">
+			</span>
+
+			<p class="success1">Foto carregada com sucesso.</p>
+			<span class="input-file">
+				<span class="val"></span>
+				<input id="id_photo_set-1-photo" type="file" name="photo_set-1-photo">
+			</span>
+
+			<p class="success2">Foto carregada com sucesso.</p>
+			<span class="input-file">
+				<span class="val"></span>
+				<input id="id_photo_set-2-photo" type="file" name="photo_set-2-photo">
+			</span>
+
+			<p class="success3">Foto carregada com sucesso.</p>
+			<span class="input-file">
+				<span class="val"></span>
+				<input id="id_photo_set-3-photo" type="file" name="photo_set-3-photo">
+			</span>
+
+			<p class="success4">Foto carregada com sucesso.</p>
+			<span class="input-file">
+				<span class="val"></span>
+				<input id="id_photo_set-4-photo" type="file" name="photo_set-4-photo">
+			</span>
+
+			<p class="success5">Foto carregada com sucesso.</p>
+			<span class="input-file">
+				<span class="val"></span>
+				<input id="id_photo_set-5-photo" type="file" name="photo_set-5-photo">
+			</span>
+			<div class="loading"></div>
+			<input type="submit" value="ADICIONAR IMAGEM">
+			<span class="close">Fechar</span>
+		</form>
+	</div>
+</div>
+<div class="hidden">
+	<iframe id="uploader" name="uploader"/>
+</div>
+{% endblock %}

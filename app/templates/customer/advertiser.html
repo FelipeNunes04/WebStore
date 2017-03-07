@@ -1,0 +1,315 @@
+{% extends "base.html" %}
+{% block title %}Cadastro de anunciante | {{ block.super }}{% endblock %}
+{% block id %}sign-up{% endblock %}
+{%block class%}search{% endblock %}
+{% load thumbnail %}
+{% block content %}
+    <div class="menu">
+		<h2>Cadastro de anunciante </h2>
+		<p>Anuncie conosco e aproveite inúmeras vantagens que farão de você e de sua empresa referências em sua cidade e bairro.</p>
+
+		<h4>Vantagens em ser um anunciante</h4>
+		<p>Conheça algumas das vantagens:<br />
+        - Modo fácil e rápido de construir seu anúncio, direcionado ao seu público-alvo.<br />
+        - Sua empresa, serviços e/ou produtos 24h, todos os dias da semana na mídia.<br />
+        - Alcance milhares de pessoas a um clique.<br />
+        - Canal de comunicação com seus clientes.<br />
+        - Preço acessível.<br />
+        - Tudo isso entre uma infinidade de outras vantagens.<br />
+        Anuncie e comprove!</p>
+        {% include "appsite/facebook.html" %}
+	</div>
+	<div class="bg-top">
+		<div class="bg-bottom">
+			<div class="article">
+				<div class="banner">
+					<p class="breadcrumb">Você está em: <a href="/">Home</a> » Cadastro de anunciante</p>
+				</div>
+				<form action="" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+				     {% csrf_token %}
+				     <p class="help-text">Por favor, preencha os demais campos do formulário para efetuar seu cadastro. Os campos marcados com <span class="required">*</span> são obrigatórios:</p>
+				    {% if form.errors %}
+				    <div class="error">
+				        <div class="top">
+					        <h3>Seu cadastro não foi efetivado.</h3>
+					        <p>Por favor, preencha os campos listados abaixo corretamente:</p>
+				        </div>
+				        <ul>
+    				        {% for field in form %}
+                                {% if field.errors %}<li><strong>{{ field.label }}</strong> {{ field.errors|striptags }}</li>{% endif %}
+    				        {% endfor %}
+				        </ul>
+				    </div>
+				    {% endif %}
+				    <div class="plan">
+				        {{ form.plan.label_tag }} <span class="required"> *</span>
+				        {{ form.plan }}
+    			    </div>
+    			    <span class="multiplication">X</span>
+    			    <div class="small-column signature">
+				        {{ form.number_ads.label_tag }} <span class="required"> *</span>
+				        <div class="border-left margin">
+						    <div class="border-right small">
+				                <input id="id_number_ads" type="text" name="number_ads">
+				    	    </div>
+						</div>
+				    </div>
+				    <span class="total">=</span>
+                    <div class="small-column">
+                        <label for="total-value">Valor total (R$)</label>
+                        <div class="border-left margin">
+							<div class="border-right">
+                                <span id="value_signature"></span>
+							</div>
+						</div>
+                    </div>
+				    <h2>Dados Profissionais</h2>
+				    <div class="column">
+        	            {{ form.name.label_tag }} <span class="required"> *</span>
+				        <div class="border-left">
+							<div class="border-right large">
+								{{ form.name }}
+							</div>
+						</div>
+				    </div>
+                    <div class="column">
+                        {{form.fancy_name.label_tag}}<span class="required"> *</span>
+                        <div class="border-left">
+							<div class="border-right large">
+								{{form.fancy_name}}
+							</div>
+						</div>
+                    </div>
+                    <div class="column">
+                        {{ form.type_person.label_tag}}<span class="required"> *</span>
+                        {{ form.type_person }}
+                    </div>
+                     <div class="column">
+                        {{form.cpf_cnpj.label_tag}}<span class="required"> *</span>
+                        <div class="border-left">
+							<div class="border-right medium">
+								{{ form.cpf_cnpj }}
+							</div>
+						</div>
+                    </div>
+                     <div class="column responsible">
+                         {{ form.responsible.label_tag }}<span class="required"> *</span>
+                         <div class="border-left">
+ 							<div class="border-right large">
+ 								{{ form.responsible}}
+ 							</div>
+ 						</div>
+                     </div>
+                    <div class="column">
+                        {{ form.gender.label_tag}}<span class="required"> *</span>
+                        {{ form.gender }}
+                    </div>
+                    <div class="column">
+                        {{ form.birth_date.label_tag }}<span class="required"> *</span>
+                        <div class="border-left">
+							<div class="border-right medium">
+								{{ form.birth_date}}
+							</div>
+						</div>
+                    </div>
+				    <div class="column">
+                        {{ form.phone.label_tag }}<span class="required"> *</span>
+                        <div class="border-left">
+							<div class="border-right tiny">
+								<input id="id_area_phone" type="text" name="area_phone" maxlength="2">
+							</div>
+						</div>
+						<div class="border-left phone">
+							<div class="border-right minimal">
+								{{ form.phone }}
+							</div>
+						</div>
+                    </div>
+                    <div class="column">
+                        {{ form.cell_phone.label_tag }}
+                        <div class="border-left">
+							<div class="border-right tiny">
+								<input id="id_area_cell_phone" type="text" name="area_cell_phone" maxlength="2">
+							</div>
+						</div>
+						<div class="border-left phone">
+							<div class="border-right minimal">
+								{{ form.cell_phone }}
+							</div>
+						</div>
+                    </div>
+                    <div class="row">
+                    {% with request.user.get_profile as profile %}
+                        <label for="id_phone_area_code">Avatar:</label>
+                        {% if profile.image %}
+        			        <span class="field"><img src="{% thumbnail profile.image 45x45 crop='smart' %}"></span>
+    			        {% else %}
+        			        <span class="field"><img src="{{ STATIC_URL }}img/avatar.jpg"></span>
+                        {% endif %}
+                    {% endwith %}
+                    <p class="help-text">Tamanho máximo do arquivo 200Kb - Extensão PNG, JPG, JPEG</p>
+                    <input type="file" name="image" value="{{ form.instance.image.url }}" id="id_image"/>
+                    </div>
+                    <h2>Endereço de cobrança</h2>
+                    <div class="small-column">
+                        {{ form.zip_code.label_tag }}<span class="required"> *</span>
+                        <div class="border-left">
+							<div class="border-right small">
+								{{ form.zip_code }}
+							</div>
+						</div>
+                    </div>
+                    <div class="row">
+                        {{ form.address.label_tag }}<span class="required"> *</span>
+                        <div class="border-left">
+							<div class="border-right big">
+								{{ form.address }}
+							</div>
+						</div>
+                    </div>
+                    <div class="small-column">
+                        {{form.number.label_tag}}<span class="required"> *</span>
+                        <div class="border-left">
+							<div class="border-right small">
+								{{ form.number }}
+							</div>
+						</div>
+                    </div>
+                    <div class="small-column">
+                        {{ form.complement.label_tag }}
+                        <div class="border-left">
+							<div class="border-right small">
+								{{ form.complement }}
+							</div>
+						</div>
+                    </div>
+                    <div class="small-column">
+                        {{ form.area.label_tag }}<span class="required"> *</span>
+                        <div class="border-left">
+							<div class="border-right small">
+						        {{ form.area }}
+						    </div>
+						</div>
+                    </div>
+                    <div class="small-column _state">
+                        {{ form.state.label_tag}}<span class="required"> *</span>
+                        {{ form.state }}
+                    </div>
+                    <div class="small-column">
+                        {{ form.city.label_tag }}<span class="required"> *</span>
+                        <div class="border-left">
+							<div class="border-right small">
+						        {{ form.city }}
+						    </div>
+						</div>
+                    </div>
+                    <h2>Dados de acesso</h2>
+                    <div class="medium-column">
+                        {{ form.email.label_tag }}<span class="required"> *<em> (não é necessário alterar)</em></span>
+                        <div class="border-left">
+							<div class="border-right regular">
+								{{ form.email }}
+							</div>
+						</div>
+                    </div>
+                     <div class="password">
+                        {{ form.password.label_tag }}<span class="required"> *</span>
+                        <div class="border-left">
+							<div class="border-right">
+								{{ form.password }}
+							</div>
+						</div>
+                    </div>
+                     <div class="password">
+                        {{ form.check_password.label_tag }}<span class="required"> *</span>
+                        <div class="border-left">
+							<div class="border-right ">
+								{{ form.check_password }}
+							</div>
+						</div>
+                    </div>
+                    <p class="submit">
+                        <input type="submit" value="ENVIAR CADASTRO"/>
+                    </p>
+                    <p class="help-text">obs.: Senhas devem conter no mínimo 3 e no máximo 12 de caracteres alfanuméricos.</p>
+				</form>
+
+			</div>
+			<div class="confirmation">
+    		    <div class="fancybox-confirmation">
+    		        <div class="text">
+        	        <p class="title">CONTRATO DE DIVULGAÇÃO NA INTERNET</p><br />
+
+                    A empresa Virtuallia – O melhor da sua cidade, inscrita no CNPJ sob nº 12.211.466/0001-15, doravante designada simplesmente CONTRATADA, tendo como Responsável Legal Rodrigo MacarioRigobello e Sérgio Souza Figueiredo, fica estabelecida à Rua Itapura, 1078, Jd. Paulistano na cidade de Ribeirão Preto-SP.<br />
+                    Na figura de CONTRATANTE, venho por meio deste contrato reiterar como verdadeiras as informações passadas durante o processo de preenchimento do meu cadastro junto ao SITE Virtuallia. Dando como verídica estás informações, me torno ciente e responsável por qualquer informação incorreta cadastrada no site Virtuallia. Reconheço como verdadeiras tais afirmações cadastrais para poder dar continuidade ao plano que almejo contratar. Sendo que, estas informações constam em meu cadastro, podendo as mesmas serem acessadas para futura verificação legal junto à jurisdição brasileira.Os signatários deste, devidamente qualificados têm entre si justos e contratados nesta e na melhor forma de direito, o que se segue:<br />
+                    <br />
+                    CLÁUSULA PRIMEIRA – OBJETO<br />
+                    1.1 - Constitui o objeto do presente contrato, a contratação para divulgação de informações referentes aCONTRATANTE em áreas do site www.virtualia.com.br, a fim de exposição de anúncio de produtos/serviços da CONTRATANTE, através de imagens gráficas ("banners"), fotos, entre outras mais que serão descritas a seguir conforme o plano contratado pela CONTRATANTE.  Aceitando e concordando entre si, reciprocamente, as condições de uso descritas abaixo.<br />
+                    <br />
+                    CLÁUSULA SEGUNDA – FORMA<br />
+                    2.1 - A divulgação da CONTRATANTE se dará conforme o plano contratado abaixo:<br />
+                    Plano FIT:nome da empresa, logotipo, foto da empresa, endereço, telefone, email, link, descrição dos principais serviços ou produtos, Google maps, comentários, compartilhamento em redes sociais, indicação, e link de denúncia.<br />
+                    <br />
+                    CLÁUSULA TERCEIRA – PREÇO e PERÍODO<br />
+                    3.1 - Pela divulgação prevista, o preço final e o período de divulgação do seu anúncio será referente ao plano escolhido no cadastro do seu anúncio.<br />
+                    <br />
+                    CLÁUSULA QUARTA – PREÇO e FORMA DE PAGAMENTO<br />
+                    4.1 – O valor dos anúncios será pago antecipadamente, salvo convenção em contrário, estipulada entre as partes. O pagamento deverá ser efetuado em parcela única no dia da data do vencimento da faturavigente. Sendo a cobrança enviada via email, conforme email cadastrado na conta do CONTRATANTE. Podendo o pagamento ser feito através de boleto bancário, débito em conta ou cartão de crédito, ou via Pagseguro.<br />
+                    4.2 - Ocorrendo atraso no pagamento, a CONTRATADA está autorizada a cobrar multa de 2% (dois por cento) mais juros de 1% ao mês, além de correção monetária igual ao IGPM da Fundação Getúlio Vargas.<br />
+                    <br />
+                    CLÁUSULA QUINTA - INADIMPLÊNCIA<br />
+                    5.1 - Caso não seja efetuado o pagamento de quaisquer quantias devidas pela CONTRATANTE, na forma e prazo estipulados pelas partes, a CONTRATANTE desde logo ficará considerada inadimplente, com sua área de exibição imediatamente substituída do direito de uso por outro contratante ou pela própria CONTRATADA. A eliminação do direito de uso provocará também o apagamento de todos os banners remetidos pelaCONTRATANTE, não tendo esta qualquer direito a indenização ou reparação dos mesmos.<br />
+                    <br />
+                     CLÁUSULA SEXTA – RESPONSABILIDADES DA CONTRATANTE<br />
+                    6.1 - É de responsabilidade da CONTRATANTE o pagamento dos preços convencionados, definido neste contrato, bem como não expor materialilícito, difamatório ou cujos preços/prazos de entrega não sejam condizentes com o anunciado, ficando a CONTRATANTE, em caso de descumprimento desta cláusula, sujeita a ações judiciais previstas na legislação brasileira .<br />
+                    6.2 – A CONTRATANTE elaborará, ás suas próprias expensas e custas, anúncio gráfico (banner), fotos, vídeos e o remeterá via correio eletrônico ou pelo administrativo do site www.virtuallia.com.br.<br />
+                    <br />
+                    CLÁUSULA SÉTIMA – RESPONSABILIDADES DA CONTRATADA<br />
+                    7.1 – Disponibilizar os locais tratados para inserção, a ser realizada pela CONTRATANTE,dos banners, anúncios, links, descrição e outras formas contratadas pela divulgação comercial, na (s) página (s) prevista (s), pelo período contratado.<br />
+                    7.2 - Até 72 (setenta e duas) horas após remessa, a CONTRATADA fará a aprovação ou não do conteúdo do(s) banner(s) remetido(s) e das páginas de destino do (s) mesmo (s). Uma vez aprovado, o (s) banner (s) será (ão) incluído (s) na (s) área (s) contratada (s), desde que haja disponibilidade para sua inserção.<br />
+                    <br />
+                    CLÁUSULA OITAVA -DA EFICÁCIA DAS DISPOSIÇÕES<br />
+                    8.1 - Na hipótese em que alguma ou mais disposições deste Contrato sejam consideradas inválidas, ilegais ou, de alguma forma, inexequíveis, a validade, legalidade ou aplicabilidade das disposições remanescentes contidas no mesmo não ficarão, de modo algum, afetadas ou comprometidas. As partes deverão envidar os seus melhores esforços no sentido de substituir qualquer disposição inválida, ilegal ou inaplicável por outra válida, cujo efeito econômico seja semelhante àquela considerada inválida, ilegal ou inaplicável.<br />
+                    <br />
+                    CLÁUSULA NONA - DA RESCISÃO<br />
+                    9.1 - O presente contrato poderá ser rescindido, mediante aviso prévio com 30 (trinta) dias de antecedência antes do prazo do próximo vencimento ou mediante notificação, interpelação judicial ou extrajudicial: (i) na hipótese de descumprimento de quaisquer de suas cláusulas e condições, por iniciativa da parte que não lhes der causa; ou (ii) nas demais hipóteses previstas em lei. Na hipótese de rescisão, independente dos motivos, os banners expostos serão excluídos imediatamente da área de divulgação e eliminados definitivamente da área de armazenagem. A CONTRATADA não será responsável por qualquer reparação ou dano a este título, pelo que concorda, expressamente, a CONTRATANTE, sendo certo que a CONTRATANTE deverá ter cópia do (s) banner (s) remetido (s) em seus próprios arquivos, de forma a recuperá-los em qualquer ocasião.<br />
+                    9.2 Em caso de rescisão de contrato sem justa causa, aCONTRATANTE deverá pagar uma multa contratual referente ao rompimento do contrato de 50%(cinquenta per cento) do valor restante ao período contratado. <br />
+                    <br />
+                    CLÁUSULA DÉCIMA- DAS PROIBIÇÕES<br />
+                    10.1 - É expressamente proibido a CONTRATANTE propor banners para exposição de anúncios vinculados a produtos, serviços ou websites que: i) sejam contrários á lei; ii) induzam a práticas lesivas de comercialização ou fraude; iii) violem direitos públicos ou individuais; iv) não estejam disponíveis, nos preços e condições anunciados, para entrega de acordo com a oferta exposta. Na hipótese destas ocorrências, a CONTRATADA considerará rescindido por justa causa o contrato, não sendo cabível o reembolso proporcional citado no parágrafo anterior, sendo que toda responsabilidade cível, comercial, criminal, penal ou qualquer outra do ato ilícito praticado serão da CONTRATANTE.<br />
+                    <br />
+                    CLÁUSULA DÉCIMA PRIMEIRA – OUTRAS DISPOSIÇÕES<br />
+                    11.1 - A auditoria (contagem) do número de exposições é efetivada pela própria CONTRATADA. Na hipótese de a CONTRATANTE optar por auditoria independente, sua intenção deverá ser comunicada com antecedência de 120 (cento e vinte horas) ao do início do anúncio, cabendo a CONTRATANTE a escolha, a contratação e o cadastramento no sistema de controle do auditor escolhido e o pagamento dos seus honorários, não havendo qualquer interferência, responsabilidade ou gestão da CONTRATADA nos procedimentos que forem exigidos em decorrência desta opção. Eventual divergência ocorrida entre os relatórios dos auditores independentes e da CONTRATADA serão conciliadas imediatamente e ajustadas no decorrer do período de vigência do contrato. Findo a exposição contratada, e não se pronunciando a CONTRATANTE até 24 (vinte e quatro) horas, presume-se completada e certo o contrato.<br />
+                    11.2 - É expressamente proibido a CONTRATANTE propor banners, links, mensagens ou outras formas gráficas para exposição de anúncios vinculados a produtos, serviços ou websites que: i) sejam contrários á lei; ii) induzam a práticas lesivas de comercialização ou fraude; iii) violem direitos públicos ou individuais; iv) não estejam disponíveis, nos preços e condições anunciados, para entrega de acordo com a oferta exposta. Na hipótese destas ocorrências, a CONTRATADA considerará rescindido por justa causa o contrato, não sendo cabível reembolso, total ou parcial, de qualquer valor pago antecipadamente ou devido até a data da infração, sendo que toda responsabilidade cível, comercial, criminal, penal ou qualquer outra do ato ilícito praticado serão da CONTRATANTE.<br />
+                    11.3 - A comercialização de produtos e/ou a prestação de serviços a terceiros, por parte da CONTRATANTE, é de sua inteira responsabilidade, não sendo a CONTRATADA responsável por quaisquer danos diretos e/ou indiretos causados a terceiros, advindos da exibição dos anúncios em desacordo com o Código de Defesa do Consumidor e outras legislações aplicáveis ao comércio e/ou prestação de serviços, por parte da CONTRATANTE.<br />
+                    11.4 - O presente contrato obrigará as partes, seus respectivos sucessores e cessionários autorizados, não podendo ser cedido, total ou parcialmente, por qualquer das partes sem o consentimento prévio, por escrito, da outra parte.<br />
+                    <br />
+                    CLÁUSULA DÉCIMA SEGUNDA - LEI APLICÁVEL<br />
+                    12.1 - O presente contrato será regido e interpretado de acordo com as leis da República Federativa do Brasil.<br />
+                    <br />
+                    CLÁUSULADÉCIMATERCEIRA - DO LITÍGIO<br />
+                    13.1 - Fica desde já definido o juízo arbitral, conforme preconizado na Lei 9703/96, para dirimir eventuais litígios decorrentes deste contrato. E por estarem justas e contratadas, as partes concordam com o presente instrumento. <br />
+                    </p>
+                    </div>
+                    <p class="concordo">Li e concordo.</p>
+                    <div class="btn">
+            	        <a href="#" class="yes">
+    				        <span class="right">
+    				            <span class="btn-yes">
+    				                Concordo
+    				            </span>
+    				        </span>
+    				    </a>
+    				    <a href="#" class="no">
+    				        <span class="right">
+    				            <span class="btn-yes">
+    				                Cancelar
+    				            </span>
+    				        </span>
+    				    </a>
+				    </div>
+    	        </div>
+    	    </div>
+		</div>
+	</div>
+{% endblock %}

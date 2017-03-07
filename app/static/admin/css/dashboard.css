@@ -1,0 +1,64 @@
+/* DASHBOARD */
+
+.dashboard table.holder {
+    width: 100%;
+}
+
+.dashboard table.holder .details {
+    width: 40%;
+}
+
+.dashboard .module {
+    margin-top: 10px;
+}
+
+.dashboard .module > table {
+    width: 100%;
+}
+
+.dashboard .module > table th {
+    width: 100%;
+}
+
+.dashboard .module > table td {
+    white-space: nowrap;
+}
+
+.dashboard .module > table td a {
+    display: block;
+    padding-right: .6em;
+}
+
+/* RECENT ACTIONS MODULE */
+
+.module ul.actionlist {
+    margin-left: 0;
+}
+
+ul.actionlist li {
+    list-style-type: none;
+}
+
+ul.actionlist li.changelink {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+}
+
+#content {
+    width: 97.3%;
+}
+
+.dashboard table.simple tbody td h3{
+    text-align: center;
+    font-size: 18px;
+    color: #5B80B2;
+}
+
+.dashboard table.column tbody th:first-child {
+    width: 50px;
+}
+
+#chart_div {
+    width: 100%;
+}

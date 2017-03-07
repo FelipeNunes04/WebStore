@@ -1,0 +1,5 @@
+Sugestão:
+{{ suggestion }}
+
+--
+Enviado em {% now "d/m/Y" %} às {% now "H:i:s" %}

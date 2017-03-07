@@ -1,0 +1,179 @@
+{% load category_tags locations_tags activities_tags %}
+<!DOCTYPE html
+	 PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>{% block title %}Virtuallia{% endblock %}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico" >
+	{% block css %}
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jquery.select-replace.css" />
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/fontface.css" />
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" />
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jquery.fancybox-1.3.4.css" />
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/nivo-slider.css" />
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jquery.jscrollpane.css" />
+	{% endblock %}
+	{% block extra_css %}{% endblock %}
+	{% block js %}
+		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/lib/jquery.select-replace.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/lib/jquery.masked.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/lib/jquery.roundabout.min.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/lib/jquery.fancybox-1.3.4.pack.js"></script>
+		<!-- // <script type="text/javascript" src="{{ STATIC_URL }}js/lib/jquery.nivo.slider.js"></script> -->
+		<script type="text/javascript" src="{{ STATIC_URL }}js/lib/jquery.nivo.slider.pack.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/lib/jquery.mousewheel.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/lib/mwheelIntent.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/lib/jquery.jscrollpane.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/lib/jquery.placeholder.js"></script>
+		<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=ABQIAAAAYMSBDlx2pguA8dIXG97DJRSbxav66zlCvQRJr9jt3NKLsHS8uRSS7_NLA3EDFM-i-GhuCEQ1sdtm0w" type="text/javascript"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/prj/carousel.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/prj/base.js"></script>
+		{% block extra_fb %}
+		<meta property="fb:admins" content="100205710092063"/>
+		{% endblock %}
+	{% endblock %}
+	{% block extra_js %}{% endblock %}
+	<script type="text/javascript">
+
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-27398185-1']);
+	  _gaq.push(['_trackPageview']);
+
+	  (function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+
+	</script>
+</head>
+<body id="{% block id %}{% endblock %}" class="{% block class%}{% endblock %}" rel="{% block rel %}{% endblock %}">
+	<div id="fb-root"> </div>
+	<script>(function(d, s, id) {
+	  var js, fjs = d.getElementsByTagName(s)[0];
+	  if (d.getElementById(id)) return;
+	  js = d.createElement(s); js.id = id;
+	  js.src = "//connect.facebook.net/pt_BR/all.js#xfbml=1";
+	  fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));</script>
+	<div id="header">
+		<div class="wrap">
+			<h1><a href="{% url appsite_home %}">Virtuallia, seu mundo digital</a></h1>
+			<form id="search-form" action="{% url result_search %}" method="get" >
+				<div class="state">
+					<label for="id_state">UF:</label>
+					<select name="s" id="id_state">
+						<option value="0">UF</option>
+						{% get_root_state as search_state %}
+						{% for s in search_state %}
+							<option value="{{ s.state }}" {% if request.session.state.id == s.state %}selected="selected"{%endif %}>{{ s.state__state|upper }}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="city">
+					<label for="id_locale">Escolha uma cidade:</label>
+					<select id="id_locale" name="l">
+						
+						{% if request.session.city %}
+							{% for city in list_city %}
+								<option value="{{ city.city__id }}" {% if request.session.city.id == city.city__id %}selected="selected"{%endif %}>{{ city.city__city }}</option>
+							{% endfor %}
+						{% else %}
+					        <option value="">Todas cidades</option>
+						{% endif %}
+					</select>
+				</div>
+	
+				<div class="search">
+					<label for="search">Faça uma busca:</label>
+					<input id="search" type="text" value="{{ request.GET.q }}" name="q" />
+				</div>
+			</form>
+			{% if user.is_authenticated %}
+			<div id="welcome">
+				<label for="id_username">Bem vindo {{ user.first_name }}</label>
+				<a class ="logof" href="{% url edit_registration %}">» Editar cadastro</a>
+				{% if user.get_profile.is_advertiser %}
+					<a class="logof" href="{% url my_ads %}">» Meu(s) anúncio(s)</a>
+					<a class="logof" href="{% url customer_signout %}">» Logout</a>
+				{% else %}
+					<a class="logof" href="{% url contact_advertiser_form %}">» Anuncie</a>
+					<a class="logof" href="{% url customer_signout %}">» Logout</a>
+				{% endif %}
+			</div>
+			{% else %}
+				<form id="login" id="login-form" action="{% url customer_signin %}" method="post" >
+					{% csrf_token %}
+					<div>
+						<label for="id_username">Efetuar login:</label>
+							<input id="id_username" type="text" name="username"
+										placeholder="Seu email"/>
+							<input id="id_password" type="password" name="password"
+										placeholder="Sua senha"/>
+						<input type="submit" value="" />
+					</div>
+				</form>
+				<div id="register">
+					<p class="registration"><a href="{% url customer_registration %}">» Newsletter</a></p>
+					<p class="forgot_password"><a href="{% url forgot_password %}">» Esqueci a senha</a></p>
+					<p><a href="{% url contact_advertiser_form %}">» Anuncie</a></p>
+				</div>
+			{% endif %}
+		</div>
+		{% block carrousel %}{% endblock %}
+		{% block menu_top %}{% render_menu %}{% endblock %}
+	</div>
+	<div id="content">
+		<div class="wrap">
+			{% block content %}{% endblock %}
+		</div>
+		<div class="separator"> </div>
+	</div>
+	<div id="footer">
+		<div class="wrap">
+			<h3><a href="{% url appsite_home %}">Virtuallia, seu mundo digital</a></h3>
+			<ul id="social">
+				<li class="facebook"><a href="https://www.facebook.com/pages/Virtuallia-O-melhor-da-sua-Cidade/100205710092063?sk=app_201143516562748" target="_blank">Facebook</a></li>
+				<li class="twitter"><a href="https://twitter.com/#!/Virtuallia" target="_blank">Twitter</a></li>
+			</ul>
+			<div id="copyright">
+				{% block menu_footer %}{% render_menu_footer %}{% endblock %}
+				<ul>
+					<li class="fixed"><a href="{% url appsite_corporate %}">INSTITUCIONAL</a></li>
+					<li class="fixed"><a href="{% url appsite_privacy %}">POLITICA DE PRIVACIDADE</a></li>
+					<li class="fixed"><a href="{% url appsite_terms_of_use %}">TERMOS DE USO</a></li>
+					{% if not user.get_profile.is_advertiser %}
+						<li class="fixed"><a href="{% url contact_advertiser_form %}">ANUNCIE</a></li>
+					{% endif %}
+					<li><a href="{% url contact_form %}">CONTATO</a></li>
+				</ul>
+				<p>© {% now "Y" %} - Virtuallia - Direitos Reservados</p>
+			</div>
+			<div class="cle"> </div>
+			<div class="li">
+				<ul>
+					{% get_root_category as list_category %}
+					{% for category in list_category %}
+						<li>{{ category.name }}</li>
+					{% endfor %}
+				</ul>
+				<ul>
+					{% get_root_option_value as list_option %}
+					{% for option_value in list_option %}
+						<li>{{ option_value.name }}</li>
+					{% endfor %}
+				</ul>
+				<ul>
+					{% get_root_activity as list_activity %}
+					{% for activity in list_activity %}
+						<li>{{ activity.name }}</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

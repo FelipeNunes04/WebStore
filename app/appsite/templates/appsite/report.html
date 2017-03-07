@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Denuncie | {{ block.super }}{% endblock %}
+{% block id %}contact{% endblock %}
+{% block class %}text{% endblock %}
+
+{% block content %}
+    <div class="bg-bottom">
+    	<p class="breadcrumb">Você está em: <a href="/">Home</a> » Contato</p>
+    	<div class="article">
+    		<h3>Denuncie</h3>
+    		<div class="form">
+    			<h4>Faça sua denúncia</h4>
+    			{% if messages %}
+                    {% for message in messages %}
+                    <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+    			<form method="post">
+    			    {% csrf_token %}
+    				<div>
+    				    {{ form.subject.label_tag }}
+    				    {{ form.subject }}
+    				    
+    				    
+    				    {{ form.name.errors }}
+    	                {{ form.name.label_tag }}
+    					<div class="border-left big">
+    						<div class="border-right">
+    							{{ form.name }}
+    						</div>
+    					</div>
+    					{{ form.email.errors }}
+    					{{ form.email.label_tag }}
+    					<div class="border-left regular">
+    						<div class="border-right">
+    							{{ form.email }}
+    						</div>
+    					</div>
+    					{{ form.message.errors }}
+    					{{ form.message.label_tag }}
+    					{{ form.message }}
+    					{{ form.comment }}
+    					<div class="submit-left">
+    						<div class="submit-right">
+    							<input type="submit" value="ENVIAR" />
+    						</div>
+    					</div>
+    				</div>
+    			</form>
+    			<div class="clear"></div>
+    		</div>
+    		<div class="contact">
+    			<h4>Fale conosco</h4>
+    			<p>O Virtuallia oferece a você um espaço exclusivo para nos comunicarmos.<br /><br />
+                Aqui você pode expressar sua opinião, dúvida, sugestão ou interesse em anunciar em nossos banners.<br /><br />
+                Sinta-se a vontade para entrar em contato conosco. Você é de suma importância para nós.</p>
+                {# <address> #}
+                {#    <span class="phone">11 9865-6545</span> #}
+                {#    <a class="email" href="mailto:contato@virtuallia.com.br">contato@virtuallia.com.br</a> #}
+                {# </address> #}
+    		</div>
+    		<div class="clear"></div>
+    	</div>
+    </div>
+{% endblock %}

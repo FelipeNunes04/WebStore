@@ -1,0 +1,17 @@
+escrito por: {{ comment.user_name }} ({{ comment.user_email }}), 
+em {{ comment.content_type }}
+Data: {{ comment.submit_date}} 
+
+{% if comment.comment %}
+    Comentário:
+    {{ comment.comment }}
+{% endif %}
+
+
+Denunciado por: {{ data.name }} ({{ data.email }}).
+
+Mensagem:
+{{ data.message }}
+
+--
+Enviado em {% now "d/m/Y" %} às {% now "H:i:s" %}

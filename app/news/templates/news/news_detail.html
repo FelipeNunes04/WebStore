@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% load thumbnail pagination_tags comments %}
+{% block title %}{{ entry.title }} | {{ block.super }}{% endblock %}
+{% block extra_fb %}
+	<meta property="og:title" content="Virtuallia" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="http://www.virtuallia.com.br{{ request.META.PATH_INFO }}" />
+	<meta property="og:image" content="http://www.virtuallia.com.br{{ MEDIA_URL }}{{ entry.img_display }}" />
+	<meta property="og:description" content="{{ entry.brief }}">
+	<meta property="og:site_name" content="Virtuallia" />
+	<meta property="fb:admins" content="100205710092063"/>
+{% endblock %}
+{% block id %}news{% endblock %}
+{% block class %}text{% endblock %}
+
+{% block content %}
+<div class="bg-bottom">
+	<p class="breadcrumb">Você está em: <a href="/">Home</a> » <a href="{% url category_detail_view entry.category.slug %}">{{ entry.category }}</a> » Dicas de {{ entry.category }}</p>
+	<div class="article">
+		<h3>Dicas de {{ entry.category.name }}</h3>
+		<div class="news">
+			<div class="title">
+				<div class="bg-title-top">
+					<div class="bg-title-bottom">
+						<h2>{{ entry.title }}</h2>
+					</div>
+				</div>
+				<span class="date">{{ entry.date_added|date:"d/m/Y" }}</span>
+				<div class="clear"></div>
+			</div>
+			<p>
+				<img class="img-new" src="{% thumbnail entry.img_display 225x165 %}" alt="{{ entry.title }}" />
+				{{ entry.text|safe }}
+			</p>
+			<div class="share">
+				<div class="fb-like" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-action="recommend"></div>
+
+				<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-text="Virtuallia | {{ entry.title }}">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			</div>
+		</div>
+		<div id="more" class="pages more">
+			<div>
+				<h4>Leia + {{ entry.category.name }}</h4>
+				<ul>
+					{% autopaginate news_list 4 %}
+					{% for n in news_list %}
+						<li>
+							<h3><a href="{% url entry_detail slug=n.slug %}">{{ n.title }}</a></h3>
+							<a href="{% url entry_detail slug=n.slug %}">{{ n.brief }}</a>
+						</li>
+					{% endfor %}
+				</ul>
+				{% paginate %}
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="border"></div>
+		<div class="comments">
+			<h2 class="comments">Comentários</h2>
+			<ul>{% get_comment_list for entry as comment_list %}
+				{% for comments in comment_list %}
+					<li>
+						 {% if comments.user.get_profile.image %}
+								<img src="{% thumbnail comments.user.get_profile.image 45x45 crop='smart' %}" alt="avatar do usuario"/>
+							{% else %}
+								<img src="{{ STATIC_URL }}img/avatar.jpg" alt="avatar do usuario"/>
+							{% endif %}
+						<div class="user">
+							<strong>{{ comments.name }}</strong>
+							<span>{{ comments.submit_date|date:"d/m/Y - G\hi" }}</span>
+						</div>
+						<p>{{ comments.comment|safe }}</p>
+						<a class="report" href="{% url report_view comment_pk=comments.pk %}">Denuncie</a>
+						<div class="clear"></div>
+					</li>
+				{% endfor %}
+				<li >
+					{% get_comment_form for entry as form %}
+					<form action="{% comment_form_target %}" method="post">
+						{% csrf_token %}
+						<div class="user-profile">
+							{% if user.is_authenticated %}
+								{% if user.get_profile.image %}
+								<img src="{% thumbnail user.get_profile.image 45x45 crop='smart' %}" alt="avatar do usuario"/>
+								 {% else %}
+								<img src="{{ STATIC_URL }}img/avatar.jpg" alt="avatar do usuario"/>
+								 {% endif %}
+								<div class="user">
+									<strong>{{ user.first_name }}</strong>
+								</div>
+								<div class="email">
+									<strong>{{ user.email }}</strong>
+								</div>
+								<input type="hidden" value="{{ user.first_name }}"/>
+								<input type="hidden" value="{{ user.email }}"/>
+							{% else %}
+								<img src="{{ STATIC_URL }}img/avatar.jpg" alt="avatar do usuario"/>
+
+								<div class="user">
+									{{ form.name.label_tag }}
+									<span class="id_name"></span>{{ form.name }}<br />
+								</div>
+								<div class="email">
+									{{ form.email.label_tag }}
+									<span class="id_email"></span>{{ form.email }}
+								</div>
+							{% endif %}
+							</div>
+						{{ form.comment.label_tag }}<br /><span class="id_comment"></span><p>{{ form.comment }}</p>
+						{{ form.honeypot }}
+						{{ form.content_type }}
+						{{ form.object_pk }}
+						{{ form.timestamp }}
+						{{ form.security_hash }}
+						<table>
+							<tr>
+							<td colspan="2">
+							<input type="hidden" name="next" value="{% url entry_detail entry.slug %}" />
+							<input type="submit" name="submit" value="POSTE SEU COMENTÁRIO">
+							</td>
+							</tr>
+						</table>
+
+					</form>
+				</li>
+			</ul>
+		</div>
+		<div class="border"></div>
+	</div><!-- div.article -->
+
+</div><!-- div.bg-bottom -->
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}Nova Promoção | {{ block.super }}{% endblock %}
+{% block id %}ad{% endblock %}
+{% block class %}search{% endblock %}
+{% load thumbnail %}
+{% block content %}
+	<div class="menu">
+		{% if voucher.type_promotion == 'coupon' %}
+			<h2>Compra-Coletiva</h2>
+			<p>Aproveite esta promoção! Pague apenas no momento da compra.</p>
+		{% else %}
+			<h2> Vale-Brinde</h2>
+			<p>Aproveite esta promoção! Imprima seu vale e retire seu brinde no local.</p>
+		{% endif %}
+	    {% if request.user.get_profile.is_advertiser %}
+	    	<ul class="links">
+			    <li><a href="{% url my_ads %}">» Meu(s) anúncio(s)</a></li>
+			    <li><a href="{% url new_signature %}">» Novo anúncio</a></li>
+			    <li><a href="{% url my_promotions %}">» Minha(s) Promoção(ões)</a></li>
+		    </ul>
+	    {% endif %}
+		{% include "appsite/facebook.html" %}
+	</div>
+	<div class="bg-top">
+		<div class="bg-bottom">
+			<div class="article">
+				<div class="banner">
+					<p class="breadcrumb">Você está em: <a href="/">Home</a> » Promoção » {{ voucher.title }} </p>
+					{% if messages %}
+						{% for message in messages %}
+						<p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+						{% endfor %}
+					{% endif %}
+				</div>
+				<div class="text">
+					<div class="border">
+						<div class="content promotion">
+
+							<div class="logo">
+								{% if voucher.image %}
+									<img src="{% thumbnail voucher.image 194x194 %}" alt="{{ voucher.title }}"/>
+								{% else %}
+									<img src="{% thumbnail voucher.ad.image 194x194 %}" alt="{{ voucher.ad.fancy_name }}">
+								{% endif %}
+							</div>
+							<h2>{{ voucher.title }}</h2>
+							<div class="dates">
+								<div class="date">
+									<span>Data de início:</span>
+									<p>{{ voucher.start_date|date:'d/m/Y' }}</p>
+								</div>
+								{% if voucher.end_date %}
+									<div class="date">
+										<span>Válido até:</span>
+										<p>{{ voucher.end_date|date:'d/m/Y' }}</p>
+									</div>
+								{% endif %}
+								<div class="date">
+									<span>Limite de cupons:</span>
+									<p>{{ voucher.coupons }} / {{ voucher.limit_vouchers }}</p>
+								</div>
+							</div>
+							<div class="p">
+								{{ voucher.description|linebreaks }}
+							</div>
+							<div class="share">
+								{% if voucher.discount %}
+									<div class="price">
+										<span>Desconto:</span>
+										<p>{{ voucher.discount}}%</p>
+									</div>
+								{% endif %}
+								{% if voucher.price %}
+									{% if voucher.type_promotion == 'coupon' %}
+										<div class="small price">
+											<span>De:</span>
+									{% else %}
+										<div class="big-large price">
+											<span>Ganhe um vale-brinde no valor de:</span>
+									{% endif %}
+											<p class="price">R${{ voucher.price }}</p>
+										</div>
+								{% endif %}
+								{% if voucher.discouted_price and voucher.discount %}
+									<div class="price">
+										<span>Por:</span>
+										<br />
+										<p class="discounted_price">R${{ voucher.discouted_price }}</p>
+									</div>
+								{% endif %}
+								{% if voucher.discount and voucher.price %}
+									<div class="large price">
+										<span>Economize:</span>
+										<br />
+										<p class="the_savings">XX</p>
+									</div>
+								{% endif %}
+								<iframe src="http://www.facebook.com/plugins/like.php?app_id=108920949206604&amp;href={{ request.build_absolute_uri }}&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=true&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:94px; height:20px;" allowTransparency="true"></iframe>
+								<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-text="Virtuallia | {{ ad.fancy_name }}">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+							</div>
+							<div class="clear"></div>
+							<div class="rules">
+								<span>Regras:</span>
+								<br>
+								<p>{{ voucher.rules|linebreaks }}</p>
+							</div>
+							<a href="{% url create_code pk=voucher.pk %}">{% if voucher.type_promotion == 'valley_toast' %}Gerar Vale-brinde{% else %}Gerar cupom{% endif %}</a>
+							<div class="clear"></div>
+						</div><!-- content promotion-->
+					</div><!-- border -->
+				</div><!-- text -->
+			</div> {# article  #}
+			<div class="clear"></div>
+		</div>	{# bg-bottom #}
+	</div>
+{% endblock %}

@@ -1,0 +1,159 @@
+{% extends "admin/base_site.html" %}
+{% load cache system_admin %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% load adminmedia %}{% admin_media_prefix %}css/dashboard.css" />{% endblock %}
+{% block extrahead %}
+
+{% endblock %}
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    
+    <table border="0" cellspacing="5" cellpadding="5" class="holder">
+        <tr>
+            <td class="details">
+                <div class="module">
+                    <table border="0" cellspacing="5" cellpadding="5" class="column">
+                        <thead>
+                            <tr>
+                                <th colspan="4">10 anúncios mais visitados</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Nome Fantasia</th>
+                                <th>Visitas</th>
+                                <th>E-mail anunciante</th>
+                                <th>Categoria</th>
+                            </tr>
+                            {% get_list_ads %}
+                            {% for ad in ads %}
+                            <tr>
+                                
+                                <td><a href="/admin/ads/ad/{{ ad.id }}/">{{ ad.fancy_name|title }}</a></td>
+                                <td>{{ ad.views }}</td>
+                                <td>{{ ad.signature.customer.email }}</td>
+                                <td>{{ ad.category }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="module">
+                    <table border="0" cellspacing="5" cellpadding="5" class="simple">
+                        <thead>
+                            <tr>
+                                <th colspan="4">Notícias mais lidas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Id</th>
+                                <th>Titulo</th>
+                                <th>Visitas</th>
+                                <th>Categoria</th>
+                            </tr>
+                            {% get_list_news %}
+                            {% for entry in news %}
+                            <tr>
+                                <td><a href="/admin/news/entry/{{ entry.id }}/">{{ entry.id }}</a></td>
+                                <td><a href="/admin/news/entry/{{ entry.id }}/">{{ entry.title|truncatewords:"5" }}</a></td>
+                                <td>{{ entry.views }}</td>
+                                <td>{{ entry.category }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="module">
+                    <table border="0" cellspacing="5" cellpadding="5" class="simple">
+                        <thead>
+                            <tr>
+                                <th colspan="4">Videos mais vistos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Id</th>
+                                <th>Titulo</th>
+                                <th>Visitas</th>
+                                <th>Categoria</th>
+                            </tr>
+                            {% get_list_videos %}
+                            {% for video in videos %}
+                            <tr>
+                                <td><a href="/admin/channel/video/{{ video.id }}/">{{ video.id }}</a></td>
+                                <td><a href="/admin/channel/video/{{ video.id }}/">{{ video.title|truncatewords:"5" }}</a></td>
+                                <td>{{ video.views }}</td>
+                                <td>{{ video.category }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            <td class="chart">
+                <div class="module">
+                    <table border="0" cellspacing="5" cellpadding="5" class="simple">
+                        <thead>
+                            <tr>
+                                <th colspan="4">Assinaturas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Id</th>
+                                <th>Nome</th>
+                                <th>E-mail</th>
+                                <th>Data de vencimento</th>
+                            </tr>
+                            {% get_list_signatures %}
+                            {% for signature in signatures %}
+                            <tr>
+                                <td><a href="/admin/ads/signature/{{ signature.id }}/">{{ signature.id }}</a></td>
+                                <td><a href="/admin/ads/signature/{{ signature.id }}/">{{ signature.customer.name }}</a></td>
+                                <td>{{ signature.customer.email }}</td>
+                                <td>{{ signature.end_date }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="module">
+                    <table border="0" cellspacing="5" cellpadding="5" class="simple" >
+                        <thead>
+                            <tr>
+                                <th colspan="4">Assinaturas Inativas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Id</th>
+                                <th>Nome</th>
+                                <th>E-mail</th>
+                                <th>Data de criação</th>
+                            </tr>
+                            {% get_list_signatures %}
+                            {% for signature in signatures_inactive %}
+                            <tr>
+                                <td><a href="/admin/ads/signature/{{ signature.id }}/">{{ signature.id }}</a></td>
+                                <td><a href="/admin/ads/signature/{{ signature.id }}/">{{ signature.customer.name }}</a></td>
+                                <td>{{ signature.customer.email }}</td>
+                                <td>{{ signature.start_date }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}

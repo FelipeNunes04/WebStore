@@ -1,0 +1,104 @@
+#menu dl {
+    background: #242e39;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#menu dl dt {
+    margin: 0;
+    color: #a9b0c0;
+    float: left;
+    font-weight: normal;
+    border-right: 1px solid #414e5c;
+    border-left: 1px solid #192028;
+    cursor: pointer;
+}
+
+#menu dl dt a {
+    color: #a9b0c0;
+    background-image: url('../img/icons_menu/icons.png');
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 36px;
+    display: block;
+}
+
+#menu dl dt:hover {
+    color: #fff;
+    background: #313d4a;
+}
+
+#menu dl dt a:hover {
+    color: #fff;
+}
+
+#menu dl dt:first-child{
+    border-left: none;
+}
+
+#menu dl dt:last-child{
+    border-right: none;
+}
+
+#menu dl dd {
+    position: absolute;
+    width: auto;
+    top: 99px;
+    display: none;
+    z-index: 100000;
+}
+
+#menu dl dd a {
+    display: block;
+    width: 89%;
+    background: #667788;
+    padding: 10px;
+    color: #ffffff;
+}
+
+#menu dl dd a:hover {
+    background: #313d4a;
+    color: #fff;
+}
+
+#menu dl dd a.internal{
+    background:#667788;
+    height: 0;
+    line-height: 19px;
+    padding: 0 8px 22px 40px;
+    width: 130px;
+}
+
+#menu dl dd a.internal:hover{
+    background: #313d4a;
+    color: #fff;
+}
+#menu .icon-home a {background: url('../img/icons_menu/icons_home.png') no-repeat  11px 10px;}
+#menu .icon-location a {background: url('../img/icons_menu/icons_location.png') no-repeat 15px 10px;}
+#menu .icon-comment a {background: url('../img/icons_menu/icons_comment.png') no-repeat 11px 12px;}
+#menu .icon-stats a {background: url('../img/icons_menu/icons_stats.png') no-repeat 11px 12px;}
+#menu .icon-dashboard a { background-position: 0 0; }
+#menu .icon-order a { background-position: 0 -36px; }
+#menu .icon-catalog a { background-position: 0 -72px; }
+#menu .icon-client a { background-position: 0 -108px; }
+#menu .icon-marketing a { background-position: 0 -144px; }
+#menu .icon-newsletter a { background-position: 0 -180px; }
+#menu .icon-cms a { background-position: 0 -216px; }
+#menu .icon-report a { background-position: 0 -252px; }
+#menu .icon-settings a { background-position: 0 -324px; }
+
+/* Custom table */
+
+#footer a{ 
+    color: #818181;
+    float: right;
+    font-family: Arial;
+    font-size: 11px;
+    padding: 0 15px 10px 0;
+    text-decoration: none;
+}
+
+
+
+
+

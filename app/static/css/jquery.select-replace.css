@@ -1,0 +1,135 @@
+.selbox {
+    float:left ;
+    font-size: 11px;
+    height: 22px;
+    margin-top:2px;
+    position:relative;
+}
+.selbox .selected{
+    float: none ;
+    height:23px ;
+    margin-top: 0 ;
+    overflow:hidden ;
+    text-align: left ;
+    width: auto ;
+}
+
+.selbox .selected a{
+    background-color: inherit ;
+    display:block ;
+    font-weight: bold;
+    height:12px ;
+    margin:0 ;
+    padding: 5px 5px ;
+    text-decoration:none ;
+}
+
+#search-form .selbox .selected a{
+    font-weight: normal;
+}
+.selbox .msout{
+    height: 23px !important;
+}
+
+.selbox .msover{
+    height: 23px ;
+}
+
+
+.selbox ul{
+    position:absolute ;
+    text-align: left ;
+    z-index: 110;
+    left:-1px;
+}
+
+.selbox ul.scroll{
+    overflow-y:auto ;
+    overflow-x:hidden ;
+    position: absolute;
+    z-index: 101;
+}
+
+.selbox ul.hidden{
+    border:1px solid #394047;
+    display:none ;
+}
+
+.selbox ul li{
+    list-style-type:none  ;
+    height:14px ;
+    margin:0 ;
+    padding:6px 5px ;
+    text-align: left ;
+}
+
+#search-form .selbox .m_over{
+    background:#000;
+    color: #fff;
+}
+
+#search-form .selbox .m_out{
+    background:#2c343a;
+}
+
+#search-form .state .selbox{
+    background: url(../img/bg/bg_select_uf.png) no-repeat;
+    clear:none ;
+    color: #fff;
+}
+
+
+
+#search-form .selbox{
+    background: url(../img/bg/bg_select.png) no-repeat;
+    clear:none ;
+    color: #fff;
+}
+#search-form .selbox .selected a,#search-form .selbox .msout, #search-form .selbox .msover{
+    color:#fff ;
+}
+
+#search-form .selbox ul li{
+    border-bottom: 1px solid #394047 ;
+}
+.article .selbox .m_over{
+    background:#dadde0;
+    color: #999;
+}
+
+.article .selbox .m_out{
+    background:#dadde0;
+}
+
+body#edit-ad #extras .selbox{float:left !important;}
+
+.article .selbox{
+    background: url(../img/bg/bg_content_select.png) no-repeat;
+    clear:none ;
+    color: #666666;
+}
+
+body#contact .form .selbox{
+    margin-left: 85px;
+}
+body#contact .form .selbox ul{
+    margin-top:-1px;
+}
+body#contact .form .selbox ul .m_out, .m_over{
+    margin-left: 1px;
+    width: auto;
+    cursor: pointer;
+}
+
+.article .plan .selbox{
+    background: url(../img/bg/bg_content_select_plan.png) no-repeat;
+    clear:none ;
+    color: #666666;
+}
+
+.article .selbox .selected a,.article .selbox .msout, .article .selbox .msover{
+    color:#666666 ;
+}
+.article .selbox ul li{
+    border-bottom: 1px solid #ccc ;
+}

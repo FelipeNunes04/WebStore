@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% block title %}Cadastro | {{ block.super }}{% endblock %}
+{% block id %}sign-up{% endblock %}
+{%block class%}search{% endblock %}
+{% block content %}
+<div class="menu">
+	<h2>Meu Cadastro</h2>
+	<p>Bem-vindo ao Virtuallia! Aproveite um universo de vantagens!</p>
+	<ul class="links">
+	    <li><a href="/">» Home</a></li>
+	    <li><a class="active" href="{% url edit_registration %}">» Meu cadastro</a></li>
+    </ul>
+    {% include "appsite/facebook.html" %}
+</div>
+<div class="bg-top">
+	<div class="bg-bottom">
+		<div class="article">
+			<div class="banner">
+				<p class="breadcrumb">Você está em: <a href="./home.html">Home</a> » Cadastro</p>
+			</div>
+			<div class="data">
+			     <h3 class="success">Seu cadastro foi efetivado.</h3>
+ 			    {% with user.get_profile as profile %}
+
+			    <h2>Dados Pessoais</h2>
+                <div class="row">
+			        <span class="label">Image de exibição:</span>
+			        {% if profile.image %}
+    			        <span class="field"><img src="{% thumbnail profile.image 45x45 crop='smart' %}"></span>
+			        {% else %}
+    			        <span class="field"><img src="{{ STATIC_URL }}img/avatar.jpg"></span>
+                    {% endif %}
+                </div>
+			    <div class="column">
+			        <span class="label">Nome: <span class="required">*</span></span>
+			        <span class="field">{{ user.first_name }}</span>
+			    </div>
+                <div class="column">
+			        <span class="label">Sobrenome: <span class="required">*</span></span>
+			        <span class="field">{{ user.last_name }}</span>
+                </div>
+                 <div class="row">
+			        <span class="label">Data de nascimento: <span class="required">*</span></span>
+			        <span class="field">{{ profile.birth_date }}</span>
+                </div>
+			    <div class="column">
+			        <span class="label">Telefone residencial: </span>
+			        <span class="field">{{ profile.area_phone }} {{ profile.phone }}</span>
+                </div>
+                 <div class="column">
+			        <span class="label">Telefone celular:</span>
+			        <span class="field">{% if profile.area_cell_phone %}{{profile.area_cell_phone}}{% endif %} {% if profile.cell_phone %}{{ profile.cell_phone }}{% endif %}</span>
+                </div>
+
+                <h2>Endereço</h2>
+                <div class="row">
+			        <span class="label">Rua: </span>
+			        <span class="field">{{ profile.address }}</span>
+                </div>
+                <div class="small-column">
+			        <span class="label">Número: </span>
+			        <span class="field">{{ profile.number }}</span>
+                </div>
+                <div class="small-column">
+			        <span class="label">Complemento:</span>
+			        <span class="field">{{ profile.complement }}</span>
+                </div>
+                <div class="small-column">
+			        <span class="label">Bairro: </span>
+			        <span class="field">{{ profile.area }}</span>
+                </div>
+                 <div class="small-column">
+			        <span class="label">CEP: </span>
+			        <span class="field">{{ profile.zip_code }}</span>
+                </div>
+                <div class="small-column">
+			        <span class="label">Estado: </span>
+			        <span class="field">{% if profile.state %}{{ profile.state }}{% endif %}</span>
+                </div>
+                <div class="small-column">
+			        <span class="label">Cidade: </span>
+			        <span class="field">{{ profile.city }}</span>
+                </div>
+                <h2>Dados de acesso</h2>
+                <div class="medium-column">
+			        <span class="label">E-mail: <span class="required">*</span></span>
+			        <span class="field">{{ user.email }}</span>
+                </div>
+                 <div class="password">
+			        <span class="label">Senha: <span class="required">*</span></span>
+			        <span class="field">******</span>
+                </div>
+                <a href="/" class="button">VOLTAR</a>
+                <div class="clear"></div>
+                {% endwith %}
+            </div>
+		</div>
+	</div>
+</div>
+{% endblock %}
