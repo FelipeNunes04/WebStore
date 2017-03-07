@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% block title %}Cadastro | {{ block.super }}{% endblock %}
+{% block id %}sign-up{% endblock %}
+{%block class%}search{% endblock %}
+{% block content %}
+<div class="menu">
+	<h2>Meu Cadastro</h2>
+	<p>Lorem ipsum dolor sit amet, adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore.</p>
+	<ul class="links">
+		<li><a href="/">» Home</a></li>
+		<li><a class="active" href="{% url edit_registration %}">» Meu cadastro</a></li>
+		<li><a href="{% url my_ads %}">» Meu(s) anúncio(s)</a></li>
+		<li><a href="{% url new_signature %}">» Novo Anúncio</a></li>
+		<li><a href="{% url my_promotions %}">» Minha(s) Promoção(ões)</a></li>
+	</ul>
+	{% include "appsite/facebook.html" %}
+</div>
+<div class="bg-top">
+	<div class="bg-bottom">
+		<div class="article">
+			<div class="banner">
+				<p class="breadcrumb">Você está em: <a href="./home.html">Home</a> » Cadastro</p>
+			</div>
+			<div class="data">
+				{% if messages %}
+					{% for message in messages %}
+						 <h3 class="{{ message.tags }} signature">{{ message }}</h3>
+					{% endfor %}
+				{% else %}
+					<p class="help-text">Por favor, preencha o formulária para comprar um de nossos planos de anúnico. Os campos marcados com <span class="required">*</span> são obrigatórios:</p>
+				{% endif %}
+				{% with user.get_profile as profile %}
+					<h2>Dados Profissionais</h2>
+					<div class="row">
+						<span class="label">Image de exibição:</span>
+						{% if profile.image %}
+							<span class="field"><img src="{% thumbnail profile.image 45x45 crop='smart' %}"></span>
+						{% else %}
+							<span class="field"><img src="{{ STATIC_URL }}img/avatar.jpg"></span>
+						{% endif %}
+					</div>
+					<div class="column">
+						<span class="label">Nome: <span class="required">*</span></span>
+						<span class="field">{{ user.get_profile.name }}</span>
+					</div>
+					<div class="column">
+						<span class="label">Nome fantasia: <span class="required">*</span></span>
+						<span class="field">{{ profile.get_final_profile.fancy_name }}</span>
+					</div>
+					<div class="column">
+						<span class="label">Tipo de cadastro: <span class="required">*</span></span>
+						<span class="field">{{ profile.get_final_profile.get_type_person_display }}</span>
+					</div>
+					<div class="column">
+						<span class="label">CPF / CNPJ: <span class="required">*</span></span>
+						<span class="field">{{ profile.get_final_profile.cpf_cnpj }}</span>
+					</div>
+					 <div class="column">
+						<span class="label">Pessoa responsável: <span class="required">*</span></span>
+						<span class="field">{{ profile.get_final_profile.responsible }}</span>
+					 </div>
+					 <div class="column">
+						<span class="label">Data de nascimento: <span class="required">*</span></span>
+						<span class="field">{{ profile.get_final_profile.birth_date }}</span>
+					</div>
+					<div class="column">
+						<span class="label">Telefone comercial: <span class="required">*</span></span>
+						<span class="field">{{ profile.get_final_profile.area_phone }} {{ profile.get_final_profile.phone }}</span>
+					</div>
+					 <div class="column">
+						<span class="label">Telefone celular:</span>
+						<span class="field">{{ profile.area_cell_phone }} {{ profile.cell_phone }}</span>
+					</div>
+
+					<h2>Endereço de cobrança</h2>
+					<div class="row">
+						<span class="label">Rua: <span class="required">*</span></span>
+						<span class="field">{{ profile.address }}</span>
+					</div>
+					<div class="small-column">
+						<span class="label">Número: <span class="required">*</span></span>
+						<span class="field">{{ profile.number }}</span>
+					</div>
+					<div class="small-column">
+						<span class="label">Complemento:</span>
+						<span class="field">{{ profile.complement }}</span>
+					</div>
+					<div class="small-column">
+						<span class="label">Bairro: <span class="required">*</span></span>
+						<span class="field">{{ profile.area }}</span>
+					</div>
+					 <div class="small-column">
+						<span class="label">CEP: <span class="required">*</span></span>
+						<span class="field">{{ profile.zip_code }}</span>
+					</div>
+					<div class="small-column">
+						<span class="label">Estado: <span class="required">*</span></span>
+						<span class="field">{{ profile.state }}</span>
+					</div>
+					<div class="small-column">
+						<span class="label">Cidade: <span class="required">*</span></span>
+						<span class="field">{{ profile.city }}</span>
+					</div>
+					<h2>Dados de acesso</h2>
+					<div class="medium-column-success">
+						<span class="label">E-mail: <span class="required">*</span></span>
+						<span class="field">{{ user.email }}</span>
+					</div>
+					 <div class="password">
+						<span class="label">Senha: <span class="required">*</span></span>
+						<span class="field">******</span>
+					</div>
+					<a href="/" class="button">VOLTAR</a>
+					<div class="clear"></div>
+				{% endwith %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

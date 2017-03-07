@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% load thumbnail my_ads_tags pagination_tags %}
+{% block title %}Meus anúncios | {{ block.super }}{% endblock %}
+{% block id%}ad{% endblock %}
+{% block class%}search{% endblock %}
+{% block content %}
+<div class="menu">
+	<h2>Meu Cadastro</h2>
+	<p>Aqui você pode inserir informação(ões) referente(s) ao(s) seu(s) anúncio(s).</p>
+
+	<ul class="links">
+	    <li><a href="/">» Home</a></li>
+	    <li><a href="{% url edit_registration %}">» Meu cadastro</a></li>
+	    <li><a class="active" href="{% url my_ads %}">» Meu(s) anúncio(s)</a></li>
+        <li><a href="{% url new_signature %}">» Novo anúncio</a></li>
+        <li><a href="{% url my_promotions %}">» Minha(s) Promoção(ões)</a></li>
+    </ul>
+    {% include "appsite/facebook.html" %}
+</div>
+<div class="bg-top">
+        <div class="bg-bottom">
+		<div class="article">
+			<div class="banner">
+				<p class="breadcrumb">Você está em: <a href="/">Home</a> » Meu(s) anúncio(s)</p>
+                {% if messages %}
+                    <div class="data">
+                        {% for message in messages %}
+                            <p class="{{ message.tags }}">{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+			    {% for my_signature in list_my_signature %}
+			         <h2 class="name-signature">
+                        {{ my_signature.plan }} - Anúncios disponíveis: {{ my_signature.number_ads_available }}
+                        {% if my_signature.number_ads_available <= 0 or my_signature.signature_expired %}
+                            <a href="{% url contact_form %}" class="new-ad">Entre em contato</a>
+                        </h2>
+                        {% else %}
+                            <a href="{% url new_ad my_signature.pk %}" class="new-ad">Criar novo anúncio</a>
+                        </h2>
+
+                            {% if my_signature.number_ads_available == 1 %}
+                                <div class="text">
+                                    <div class="border">
+                                        <div class="content">
+                                            <div class="logo">
+                                                <img src="{{ STATIC_URL }}img/bg/bg_logo_ad.png" alt=""/>
+                                            </div>
+                                            <h2>Nome do anúncio</h2>
+                                            <p>Descição do anúncio</p>
+                                            <div class="links">
+                                                <span>Acesse: <a href="#">seusite.com.br</a></span>
+                                                <span>Redes sociais:</span>
+                                                <ul>
+                                                    <li class="disabled"><a href="#" class="twitter">Twitter</a></li>
+                                                    <li class="disabled"><a href="#" class="facebook">Facebook</a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="share">
+                                            {% if my_signature.signature_expired %}
+                                                <a href="{% url contact_form %}" lass="edit-ad">Entre em contato</a>
+                                            {% else %}
+                                                <a href="{% url new_ad my_signature.pk %}" class="edit-ad">Criar</a>
+                                            {% endif %}
+                                            </div>
+                                            <div class="clear"></div>
+                                        </div><!-- content -->
+                                    </div><!-- bg-bottom -->
+                                </div><!-- text -->
+                                <div class="clear"></div>
+                            {% else %}
+                                <div class="text">
+                                    <div class="border">
+                                        <div class="content">
+                                            <div class="logo">
+                                                <img src="{{ STATIC_URL }}img/bg/bg_logo_ad.png" alt=""/>
+                                            </div>
+                                            <h2>Nome do anúncio</h2>
+                                            <p>Descição do anúncio</p>
+                                            <div class="links">
+                                                <span>Acesse: <a href="#">seusite.com.br</a></span>
+                                                <span>Redes sociais:</span>
+                                                <ul>
+                                                    <li class="disabled"><a href="#" class="twitter">Twitter</a></li>
+                                                    <li class="disabled"><a href="#" class="facebook">Facebook</a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="share">
+                                            {% if my_signature.signature_expired %}
+                                                <a href="{% url contact_form %}" lass="edit-ad">Entre em contato</a>
+                                            {% else %}
+                                                <a href="{% url new_ad my_signature.pk %}" class="edit-ad">Criar</a>
+                                            {% endif %}
+                                            </div>
+                                            <div class="clear"></div>
+                                        </div><!-- content -->
+                                    </div><!-- bg-bottom -->
+                                </div><!-- text -->
+                                <div class="clear"></div>
+                                <div class="text">
+                                    <div class="border">
+                                        <div class="content">
+                                            <div class="logo">
+                                                <img src="{{ STATIC_URL }}img/bg/bg_logo_ad.png" alt=""/>
+                                            </div>
+                                            <h2>Nome do anúncio</h2>
+                                            <p>Descição do anúncio</p>
+                                            <div class="links">
+                                                <span>Acesse: <a href="#">seusite.com.br</a></span>
+                                                <span>Redes sociais:</span>
+                                                <ul>
+                                                    <li class="disabled"><a href="#" class="twitter">Twitter</a></li>
+                                                    <li class="disabled"><a href="#" class="facebook">Facebook</a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="share">
+                                            {% if my_signature.signature_expired %}
+                                                <a href="{% url contact_form %}" lass="edit-ad">Entre em contato</a>
+                                            {% else %}
+                                                <a href="{% url new_ad my_signature.pk %}" class="edit-ad">Criar</a>
+                                            {% endif %}
+                                            </div>
+                                            <div class="clear"></div>
+                                        </div><!-- content -->
+                                    </div><!-- bg-bottom -->
+                                </div><!-- text -->
+                                <div class="clear"></div>
+                            {% endif %}
+                        {% endif %}
+                    {% if my_signature.signature_expired %}
+                        <div class="error">
+                            <div class="top">
+                                <h3>Essa assinatura já expirou</h3>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <div class="clear"></div>
+                <h2 class="name-signature">Anúcios já criados</h2>
+                {% autopaginate list_ads 10 %}
+                {% for my_ad in list_ads %}
+           	        <div class="text">
+    					<div class="border">
+    						<div class="content">
+    							<div class="logo">
+    								<img src="{% thumbnail my_ad.image 194x194 %}" alt="{{ my_ad.slug }}"/>
+    							</div>
+    							<h2>{{ my_ad.fancy_name }}</h2>
+    							<p>{{ my_ad.description }}</p>
+    							<div class="links">
+    								<span>Acesse: <a href="{{ my_ad.site }}">{{ my_ad.site }}</a></span>
+    								<span>Redes sociais:</span>
+    								<ul>
+    								    {% if my_ad.twitter %}
+    									    <li><a href="{{ my_ad.twitter }}" class="twitter">Twitter</a></li>
+    									{% else %}
+    									    <li class="disabled"><a href="#" class="twitter">Twitter</a></li>
+    									{% endif %}
+    									{% if my_ad.facebook %}
+    									    <li><a href="{{ my_ad.facebook }}" class="facebook">Facebook</a></li>
+    									{% else %}
+    									    <li class="disabled"><a href="#" class="facebook">Facebook</a></li>
+    									{% endif %}
+    								</ul>
+    							</div>
+    							<div class="share">
+    						        <form class="is_active" action="{% url disable_ad slug=my_ad.slug %}" method="get" accept-charset="utf-8">
+                                        {% if my_signature.signature_expired %}
+                                            <a href="{% url contact_form %}" class="edit-ad">Entre em contato</a>
+                                        {% else %}
+                                            <label for="id_is_active">Ativar anúncio:</label>
+                                            <input id="id_is_active" type="checkbox" name="is_active" {% if my_ad.is_active %}checked="checked"{% endif %}>
+                                            <a href="{% url edit_ad slug=my_ad.slug %}" class="promotion">EDITAR</a>
+                                            <a href="{% url new_promotion slug=my_ad.slug %}" class="promotion">CRIAR PROMOÇÃO</a>
+                                        {% endif %}
+    						        </form>
+    							</div>
+                                <div class="clear"></div>
+    						</div><!-- content -->
+    					</div><!-- bg-bottom -->
+    				</div><!-- text -->
+    				<div class="clear"></div>
+           	    {% endfor %}
+			</div><!-- banner -->
+            <div class="clear"></div>
+            {% paginate %}
+		</div>
+	</div>
+</div>
+{% endblock %}

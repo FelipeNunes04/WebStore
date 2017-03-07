@@ -1,0 +1,10 @@
+Nome: {{ name }} ({{ email }})
+{% if phone %}
+Telefone: {{ phone }}
+{% endif %}
+
+Mensagem:
+{{ message }}
+
+--
+Enviado em {% now "d/m/Y" %} às {% now "H:i:s" %}

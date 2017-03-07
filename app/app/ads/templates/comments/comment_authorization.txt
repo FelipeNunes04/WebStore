@@ -1,0 +1,20 @@
+Comentário: {{ comment.comment }}
+
+no anúncio: {{ comment.content_object }}
+
+Comentário enviado: {{ comment.submit_date|date:"d/m/Y - G\hi"}}
+Por: {{ comment.name }} ({{ comment.email }})
+
+
+Para autorizar esse comentário em seu anúncio acesse:  www.virtuallia.com.br/anuncio/autorizar-comentario/{{ comment.pk }}/
+
+
+Para não autorizar esse comentário em seu anúncio acesse: 
+www.virtuallia.com.br/anuncio/bloquear-comentario/{{ comment.pk }}/
+
+
+{{ comment.content_type }}
+{{ comment.content_object.user_id }}
+{{ comment.user }}
+__
+Enviado em {% now "d/m/Y" %} às {% now "H:i:s" %}

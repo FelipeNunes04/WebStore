@@ -1,0 +1,14 @@
+Seu cadastro no site www.virtuallia.com.br foi efetuado com sucesso.
+
+Para finalizar seu cadastro clique no link abaixo, entre com seu login e senha.
+
+
+
+
+Nome: {{ name }} ({{ email }})
+Empresa: {{ fancy_name }}
+Telefone: {{ phone }}
+Cidade: {{ city }} - {{ state }}
+
+--
+Enviado em {% now "d/m/Y" %} às {% now "H:i:s" %}

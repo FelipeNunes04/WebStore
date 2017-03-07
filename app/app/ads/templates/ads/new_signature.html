@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Cadastro de anunciante | {{ block.super }}{% endblock %}
+{% block id %}sign-up{% endblock %}
+{%block class%}search{% endblock %}
+
+{% block content %}
+    <div class="menu">
+    	<h2>Nova Assinatura</h2>
+    	<p>Aqui você escolher alguns dos nossos planos e a quantidade de anúncio(s) que deseja.</p>
+
+    	<ul class="links">
+    	    <li><a href="/">» Home</a></li>
+    	    <li><a href="{% url edit_registration %}">» Meu cadastro</a></li>
+    	    <li><a href="{% url my_ads %}">» Meu(s) anúncio(s)</a></li>
+    	    <li><a class="active" href="{% url new_signature %}">» Novo anúncio</a></li>
+            <li><a href="{% url my_promotions %}">» Minha(s) Promoção(ões)</a></li>
+        </ul>
+        <form action="." method="post">
+    		<h4>O que você não encontrou?</h4>
+    		<div>
+    			<div class="border-left"><div class="border-right"><input type="text"/></div></div>
+    			<input type="submit" value="ENVIAR"/>
+    		</div>
+    	</form>
+        {% include "appsite/facebook.html" %}>
+    </div>
+	<div class="bg-top">
+		<div class="bg-bottom">
+			<div class="article">
+				<div class="banner">
+					<p class="breadcrumb">Você está em: <a href="/">Home</a> » Cadastro de anunciante</p>
+				</div>
+		        <div class="data">
+				{% if messages %}
+		            {% for message in messages %}
+			             <h3 class="{{ message.tags }} signature">{{ message }}</h3>
+			        {% endfor %}
+			    {% else %}
+			        <p class="help-text">Por favor, preencha o formulária para comprar um de nossos planos de anúnico. Os campos marcados com <span class="required">*</span> são obrigatórios:</p>
+			    {% endif %}
+                </div>
+				<form action="" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+				     {% csrf_token %}
+
+				    {% if form.errors %}
+				    <div class="error">
+				        <div class="top">
+					        <h3>Seu cadastro não foi efetivado.</h3>
+					        <p>Por favor, preencha os campos listados abaixo corretamente:</p>
+				        </div>
+				        <ul>
+    				        {% for field in form %}
+                                {% if field.errors %}<li><strong>{{ field.label }}</strong> {{ field.errors|striptags }}</li>{% endif %}
+    				        {% endfor %}
+				        </ul>
+				    </div>
+				    {% endif %}
+				    <h2>Dados do plano</h2>
+
+
+				    <div class="plan">
+				        {{ form.plan.label_tag }} <span class="required"> *</span>
+				        {{ form.plan }}
+    			    </div>
+    			    <span class="multiplication">X</span>
+    			    <div class="small-column signature">
+				        {{ form.number_ads.label_tag }} <span class="required"> *</span>
+				        <div class="border-left margin">
+						    <div class="border-right small">
+				                <input id="id_number_ads" type="text" name="number_ads">
+				    	    </div>
+						</div>
+				    </div>
+				    <span class="total">=</span>
+                    <div class="small-column">
+                        <label for="total-value">Valor total (R$)</label>
+                        <div class="border-left margin">
+							<div class="border-right">
+								<span id="value_signature"></span>
+							</div>
+						</div>
+                    </div>
+                    <p class="submit"><input type="submit" value="ENVIAR"/></p>
+				</form>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% if user.is_authenticated and user.is_staff or user.is_superuser %}
+<div id="menu">
+    <dl>
+        <dt class="icon-home"><a href="/admin/">Home</a></dt>
+
+        <dt class="icon-dashboard"><a href=".">Geral</a></dt>
+            <dd>
+                <a href="/admin/ads/ad">Anúncios</a>
+                <a class="internal" href="/admin/voucher/promotion/">Promoçãões</a>
+                {# <a class="internal" href="/admin/voucher/voucher">Cupons</a> #}
+                <a href="/admin/banner/">Banners</a>
+                <a class="internal" href="/admin/banner/banner/">Categoria</a>
+                <a class="internal" href="/admin/banner/carouselhome/">Index</a>
+                <a href="/admin/ads/plan/">Planos</a>
+                <a href="/admin/ads/signature/">Assinaturas</a>
+                <a href="/admin/payment/payment/">Formas de Pagamento</a>
+            </dd>
+
+        <dt class="icon-location"><a href=".">Localização</a></dt>
+            <dd>
+                <a href="/admin/locations/zipcode/">CEP</a>
+                <a href="/admin/locations/city/">Cidades</a>
+                <a href="/admin/locations/area/">Bairros</a>
+            </dd>
+
+        <dt class="icon-client"><a href=".">Cadastros</a></dt>
+            <dd>
+                <a href="/admin/customer/customer/">Usuarios</a>
+                <a href="/admin/customer/advertiser/">Anunciantes</a>
+                <a href="/admin/auth/group/">Grupos de administradores</a>
+                <a href="/admin/auth/user/">Todos cadastros</a>
+            </dd>
+
+        <dt class="icon-marketing"><a href=".">Conteúdo</a></dt>
+            <dd>
+                <a href="/admin/channel/video/">Video</a>
+                <a href="/admin/news/entry/">Noticias</a>
+                <a href="/admin/appsite/corporate/">Institucional</a>
+                <a href="/admin/appsite/privacypolicy/">Politica de privacidade</a>
+                <a href="/admin/appsite/termsofuse/">Termos de uso</a>
+            </dd>
+
+        <dt class="icon-comment"><a href="/admin/comments/comment/">Comentários</a></dt>
+
+        <dt class="icon-cms"><a href=".">Categorias</a></dt>
+            <dd>
+                <a href="/admin/category/category/">Categoria</a>
+                <a href="/admin/category/optiongroup/">Grupo de opções</a>
+                <a href="/admin/category/activity/">Seção</a>
+            </dd>
+
+        <dt class="icon-stats"><a href=".">Enquete</a></dt>
+            <dd>
+                <a href="/admin/polls/question/">Questoes</a>
+                <a href="/admin/polls/vote/">Resultados</a>
+            </dd>
+    </dl>
+</div>
+{% endif %}

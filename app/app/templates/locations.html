@@ -1,0 +1,10 @@
+{% block city %}
+    <div class="city">
+    	<label for="id_locale">Escolha uma cidade:</label>
+    	<select id="id_locale">
+            {% for locations in city %}
+                {{ locations.name }}
+            {% endfor %}
+    	</select>
+    </div>
+{% endblock %}

@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% load youtubizer pagination_tags comments thumbnail poll_tags str_tags %}
+{% block title %}TV | {{ block.super }}{% endblock %}
+{% block extra_fb %}
+    <meta property="og:title" content="Virtuallia - {{ video.title }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://www.virtuallia.com.br{{ request.META.PATH_INFO }}" />
+    <meta property="og:description" content="{{ video.description }}">
+    <meta property="og:site_name" content="Virtuallia " />
+    <meta property="fb:app_id" content="100205710092063" />
+{% endblock %}
+{% block id %}channel{% endblock %}
+{% block class %}search{% endblock %}
+
+{% block content %}
+
+<div class="menu">
+	<h2>TV <span>Virtuallia</span></h2>
+	<p>Assista a dicas úteis de cada categoria que facilitam seu dia a dia e o deixam mais divertido e prazeroso!</p>
+    <span class="legend">Selecione uma cateria:</span>
+	<ul class="links">
+	    {% for category in list_menu %}
+	        <li><a {% if video.category == category %}class="active"{% endif %} id="{{ category.slug }}" href="#">» {{ category.name }}</a></li>
+	    {% endfor %}
+    </ul>
+    {% block poll %} {% render_poll %} {% endblock %}
+</div>
+<div class="bg-top">
+	<div class="bg-bottom">
+		<div class="article">
+			<div class="banner">
+				<p class="breadcrumb">Você está em: <a href="/">Home</a> » {{ video.category }} » <a href="#">TV virtuallia</a> - {{ video.category }}</p>
+			</div>
+			<h2 class="category">{{ video.category.name }}</h2>
+			<div id="video">
+				<div class="border" class="text">
+					<div class="content">
+				        {{ video.video|youtubize:"400x240"|safe }}
+						<h2 class="title">{{ video.title }}</h2>
+						<p class="description">{{ video.description }}</p>
+						<div class="share">
+                            <iframe class="twitter-share-button" allowtransparency="true" frameborder="0" scrolling="no" src="//platform.twitter.com/widgets/tweet_button.html" style="width:130px; height:20px;"></iframe>
+
+                            <div class="fb-like" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-action="recommend"></div>
+
+						</div>
+					</div><!-- content -->
+				</div><!-- bg-bottom -->
+			</div><!-- #video -->
+			<div class="more">
+				<h4>+ Vídeos</h4>
+				<form id="filter-video" action="." method="get">
+					<p><label>Filtre os resultados:</label></p>
+					<ul>
+						<li><label><input id="show-all" type="radio" name="filter" checked="checked"/>Todos</label></li>
+						<li><label><input id="show-more" type="radio" name="filter" />Mais vistos</label></li>
+					</ul>
+				</form>
+				<div id="more" class="pages">
+				    <div>
+    				    <ul class="results">
+        				    {% autopaginate video_list_all 5 %}
+        				    {% for list_videos in video_list_all %}
+            					<li>
+            						<a rel="{{ list_videos.slug }}" href="{% url video_detail_view slug=list_videos.slug %}"><img src="{% thumbnail list_videos.image 87x53 crop %}" alt="{{ list_videos.slug }}"/></a>
+            						<h3><a rel="{{ list_videos.slug }}" href="{% url video_detail_view slug=list_videos.slug %}">{{ list_videos.title|truncatesmart:"50" }}  »</a></h3>
+            					</li>
+        					{% endfor %}
+        				</ul>
+            				{% paginate %}
+				    </div>
+				</div>
+				<div id="more-viewed" class="pages">
+				    <div>
+    				    <ul class="results">
+        				    {% autopaginate videos_more_viewed 5 %}
+        				    {% for list_videos in videos_more_viewed %}
+            					<li>
+            						<a rel="{{ list_videos.slug }}" href="{% url video_detail_view slug=list_videos.slug %}"><img src="{% thumbnail list_videos.image 87x53 crop %}" alt="{{ list_videos.slug }}"/></a>
+            						<h3><a rel="{{ list_videos.slug }}" href="{% url video_detail_view slug=list_videos.slug %}">{{ list_videos.title|truncatesmart:"50" }}  »</a></h3>
+            					</li>
+        					{% endfor %}
+        				</ul>
+        				{% paginate %}
+				    </div>
+				</div>
+			</div>
+			<div class="comments">
+				<h2 class="comments">Comentários</h2>
+				<ul>{% get_comment_list for video as comment_list %}
+				    {% for comments in comment_list %}
+					    <li>
+					         {% if comments.user.get_profile.image %}
+                			        <img src="{% thumbnail comments.user.get_profile.image 45x45 crop='smart' %}" alt="avatar do usuario"/>
+            			        {% else %}
+                			        <img src="{{ STATIC_URL }}img/avatar.jpg" alt="avatar do usuario"/>
+                                {% endif %}
+    						<div class="user">
+    							<strong>{{ comments.name }}</strong>
+    							<span>{{ comments.submit_date|date:"d/m/Y - G\hi" }}</span>
+    						</div>
+    						<p>{{ comments.comment|safe }}</p>
+    						<a class="report" href="{% url report_view comment_pk=comments.pk %}">Denuncie</a>
+    						<div class="clear"></div>
+    					</li>
+					{% endfor %}
+					<li >
+        			    {% get_comment_form for video as form %}
+                        <form action="{% comment_form_target %}" method="post">
+                            {% csrf_token %}
+                            <div class="user-profile">
+                    		    {% if user.is_authenticated %}
+                    		        {% if user.get_profile.image %}
+                			        <img src="{% thumbnail user.get_profile.image 45x45 crop='smart' %}" alt="avatar do usuario"/>
+                    		         {% else %}
+                    		        <img src="{{ STATIC_URL }}img/avatar.jpg" alt="avatar do usuario"/>
+                 			         {% endif %}
+                                    <div class="user">
+                                       	<strong>{{ user.first_name }}</strong>
+                                    </div>
+                                    <div class="email">
+                                        <strong>{{ user.email }}</strong>
+                                    </div>
+									<input type="hidden" value="{{ user.first_name }}"/>
+									<input type="hidden" value="{{ user.email }}"/>
+                                {% else %}
+                                    <img src="{{ STATIC_URL }}img/avatar.jpg" alt="avatar do usuario"/>
+
+                                    <div class="user">
+                                        {{ form.name.label_tag }}
+                                        <span class="id_name"></span>{{ form.name }}<br />
+                                    </div>
+                                    <div class="email">
+                                        {{ form.email.label_tag }}
+                                        <span class="id_email"></span>{{ form.email }}
+                                    </div>
+                                {% endif %}
+                    		    </div>
+
+                            {{ form.comment.label_tag }}<br /><span class="id_comment"></span><p>{{ form.comment }}</p>
+                            {{ form.honeypot }}
+                            {{ form.content_object }}
+                            {{ form.content_type }}
+                            {{ form.object_pk }}
+                            {{ form.timestamp }}
+                            {{ form.security_hash }}
+                            {{ content_type }}
+                            <table>
+                                <tr>
+                                <td colspan="2">
+                                <input type="hidden" name="next" value="{% url video_detail_view video.slug %}" />
+                                <input type="submit" name="submit" value="POSTE SEU COMENTÁRIO">
+                                </td>
+                                </tr>
+                            </table>
+
+                        </form>
+                    </li>
+                </ul>
+			</div>
+
+			<div class="clear"></div>
+		</div><!-- div.article -->
+	</div><!-- div.bg-bottom -->
+</div><!-- div.bg-top -->
+{% endblock %}

@@ -1,0 +1,9 @@
+{% block menu_top %}
+    <div id="menu">
+    	<ul>
+    	    {% for category in menu %}
+    		    <li class="{{ category.slug }}" ><a href="{% url category_detail_view slug=category.slug %}">{{ category.name }}</a></li>
+    		{% endfor %}
+    	</ul>
+    </div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load thumbnail youtubizer %}
+{% block title %}Novo anúnico | {{ block.super }}{% endblock %}
+{% block rel %}{{ ad.category.slug|lower }}{% endblock %}
+{% block id %}sign-up{% endblock %}
+{% block class %}search new-ad{% endblock %}
+
+{% block content %}
+<div class="menu">
+    <h2>Meu Cadastro</h2>
+	<p>Lorem ipsum dolor sit amet, adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore.</p>
+
+	<ul class="links">
+	    <li><a href="/">» Home</a></li>
+	    <li><a href="{% url edit_registration %}">» Meu cadastro</a></li>
+	    <li><a class="active" href="{% url my_ads %}">» Meu(s) anúncio(s)</a></li>
+	    <li><a href="{% url new_signature %}">» Novo anúncio</a></li>
+        <li><a href="{% url my_promotions %}">» Minha(s) Promoção(ões)</a></li>
+    </ul>
+{% include "appsite/facebook.html" %}
+</div>
+<div class="bg-top">
+	<div class="bg-bottom">
+		<div class="article">
+		    <div class="banner">
+				<p class="breadcrumb">Você está em: <a href="/">Home</a> » Novo anúncio</p>
+		        <form action="." method="get" accept-charset="utf-8">
+
+                     <div class="error">
+        			        <div class="top">
+        				        <h3>Novo anúncio não disponível</h3>
+        				        <p>Todos anúncios da assinatura escolhida estão sendo utilizados.<br/>
+        				            <a href="{% url new_signature %}">Comprar mais anúncios.</a>
+        				        </p>
+        			        </div>
+        			        <ul></ul>
+
+        			    </div>
+
+		        </form>
+
+	        </div>
+		</div><!-- div.article -->
+	</div><!-- div.bg-bottom -->
+</div><!-- div.bg-top -->
+
+
+{% endblock %}

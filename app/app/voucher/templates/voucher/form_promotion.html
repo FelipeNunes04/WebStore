@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block title %}Nova Promoção | {{ block.super }}{% endblock %}
+{% block id %}new-voucher{% endblock %}
+{%block class%}search{% endblock %}
+{% load thumbnail %}
+{% block content %}
+<div class="menu">
+    <h2>Promoções</h2>
+	<p>Aqui você deve inserir o tipo e as características de sua promoção.</p>
+
+	<ul class="links">
+	    <li><a href="/">» Home</a></li>
+	    <li><a href="{% url edit_registration %}">» Meu cadastro</a></li>
+	    <li><a href="{% url my_ads %}">» Meu(s) anúncio(s)</a></li>
+	    <li><a href="{% url my_promotions %}">» Minha(s) Promoção(ões)</a></li>
+	    <li><a href="{% url new_signature %}">» Novo anúncio</a></li>
+    </ul>
+{% include "appsite/facebook.html" %}
+</div>
+<div class="bg-top">
+	<div class="bg-bottom">
+		<div class="article">
+			<p class="breadcrumb">Você está em: <a href="/">Home</a> » <a href="{% url my_ads %}">Meu(s) anúncio(s)</a> » Cupom de desconto - {{ ad.ad }} - </p>
+			<form action="" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+				{% csrf_token %}
+				{% if form.errors %}
+				    <div class="error">
+				        <div class="top">
+					        <h3>Suas alterações não foram efetivadas.</h3>
+					        <p>Por favor, preencha os campos listados abaixo corretamente:</p>
+				        </div>
+				        <ul>
+    				        {% for field in form %}
+                                {% if field.errors %}<li><strong>{{ field.label }}</strong> {{ field.errors|striptags }}</li>{% endif %}
+    				        {% endfor %}
+				        </ul>
+					</div>
+				{% endif %}
+				<div class="type">
+					<label for="id_type_promotion">Tipo da promoção</label>
+					{{ form.type_promotion }}
+				</div>
+				<div class="clear"></div>
+				<div class="img-promotion">
+					<img src="{{ STATIC_URL }}img/bg/bg_photo_promotion.jpg">
+					<span class="success">Imagem carregada com sucesso</span>
+					<label for="id_image">Foto da promoção:</label>
+					{{ form.image }}
+				</div>
+				<div class="title">
+					<label for="id_title">Título:</label>
+					<div class="border-left big">
+						<div class="border-right">
+							{{ form.title }}
+						</div>
+					</div>
+				</div>
+				<div class="date">
+					<label for="id_start_date">Data de início:</label>
+					<div class="border-left small">
+						<div class="border-right">
+							{{ form.start_date }}
+						</div>
+					</div>
+					<p class="help-text">Ex.: 22/01/2012</p>
+				</div>
+				<div class="date">
+					<label for="id_end_date">Válido até:</label>
+					<div class="border-left small">
+						<div class="border-right">
+							{{ form.end_date }}
+						</div>
+					</div>
+					<p class="help-text">Ex.: 22/01/2012</p>
+				</div>
+
+				<div class="date">
+					<label for="id_limit_vouchers">Limite de cupons:</label>
+					<div class="border-left small">
+						<div class="border-right">
+							{{ form.limit_vouchers }}
+						</div>
+					</div>
+					<p class="help-text">Exemplo: 10</p>
+				</div>
+				<div class="description">
+					<label for="id_description">Descrição:</label><br />
+					{{ form.description }}
+				</div>
+
+				<div class="share">
+					<div class="price hide">
+						<label for="id_discount">Desconto:</label>
+						<div class="border-left small">
+							<div class="border-right">
+								<input id="id_discount" type="text" name="discount" placeholder="Desconto em"><p class="percent">%</p>
+							</div>
+						</div>
+						<p class="help-text">Ex.: 10.50 ou 10</p>
+					</div>
+
+					<div class="price">
+						<label for="id_price">De:</label></label><br />
+						<div class="border-left small"><p class="money">R$</p>
+							<div class="border-right">
+								{{ form.price}}
+							</div>
+						</div>
+						<p class="help-text">Ex.: 10.50</p>
+					</div>
+					<div class="price p-big hide">
+						<label for="id_discouted_price">Por:</label><br />
+						<div class="border-left small"><p class="money">R$</p>
+							<div class="border-right">
+								<input id="id_discouted_price" type="text" name="discouted_price" readonly="readonly">
+							</div>
+						</div>
+					</div>
+					<div class="price p-big hide">
+						<label for="id_discouted_price">Diferença</label>
+						<div class="border-left small"><p class="money">R$</p>
+							<div class="border-right">
+								<input id="the_savings" type="text" readonly="readonly">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="rules">
+					<label for="id_rules">Regras:</label><br />
+					{{ form.rules }}
+				</div>
+				<div class="clear"></div>
+				<div class="active">
+					<label for="id_is_active">Cupom ativo:</label>
+					{{ form.is_active}}<br>
+					<span class="helptext">Desmarcar para desativar cupom.</span>
+				</div>
+				<input type="submit" value="CRIAR CUPOM">
+				<a class="btn-cancel" href="{% url my_ads %}"> Cancelar</a>
+			</form>
+			<div class="clear"></div>
+		</div>
+	</div>
+</div>
+{% endblock %}

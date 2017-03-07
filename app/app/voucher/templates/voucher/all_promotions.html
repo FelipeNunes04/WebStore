@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load thumbnail humanize %}
+{% block title %}Cupons de Desconto | {{ block.super }}{% endblock %}
+{% block id %}result-search{% endblock %}
+{% block class %}search{% endblock %}
+
+{% block content %}
+	<div class="menu">
+	    <h2>Cupons de Desconto</h2>
+	    <p>Aqui você encontra todas as compras-coletiva e vale-brindes disponíveis do Universo Virtuallia.</p>
+	    {% include "appsite/facebook.html" %}
+	</div>
+	<div class="bg-top">
+		<div class="bg-bottom">
+			<div class="article">
+	    		<div class="banner">
+	    		   	<p class="breadcrumb">Você está em: <a href="/">Home</a> » Todas promoções</p>
+	    		</div>
+
+				<div id="results">
+					<h4>Todas Promoções</h4>
+					<div class="results">
+	    				<ul class="results">
+	    				    {% for promotion in list_promotions %}
+	            			    <li class="{% cycle 'odd' 'even' %}">
+
+	            					<div class="img-logo">
+	            						{% if promotion.image %}
+	        								<img src="{% thumbnail promotion.image 97x75 %}" alt="{{ promotion.title }}"/>
+	        							{% else %}
+	        								<img src="{% thumbnail promotion.ad.image 102x83 %}" alt="{{ promotion.title }}"/>
+	        							{% endif %}
+	        						</div>
+	            					<div class="text">
+	            						<h2>{{ promotion.title }}</h2>
+	            						<p>{{ promotion.description|truncatewords:15 }}</p>
+	            						<a href="{% url my_promotion_detail pk=promotion.pk %}">MAIS INFORMAÇÕES</a>
+	            					</div>
+	            					{% if promotion.type_promotion == "coupon" %}
+		            					<div class="img-banner">
+		        							<span class="percentage">{{ promotion.discount|intword }}% </span><br /><span>off</span>
+		        						</div>
+	        						{% else %}
+	        							<div class="img-banner">
+		        							<span class="percentage">Vale </span><span>Brinde</span>
+		        						</div>
+	            					{% endif %}
+	        					</li>
+	            			{% endfor %}
+	            		</ul>
+	            	</div>
+					<div class="clear"></div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+{% endblock %}

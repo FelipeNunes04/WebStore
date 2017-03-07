@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block id %}login{% endblock %}
+{% block class %}text{% endblock %}
+
+
+{% block content %}
+    <div class="bg-bottom">
+    	<p class="breadcrumb">Você está em: <a href="/">Home</a> » Acesso</p>
+    	<div class="article">
+    		<h3>Acesso</h3>
+    		<div class="form">
+    			<h4>Já sou cadastrado</h4>
+    			<p>Faça seu login abaixo:</p>
+    			{% if messages %}
+                    {% for message in messages %}
+                    <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+    			<form id="login" id="login-form" action="{% url customer_signin %}" method="post" >
+    			    {% csrf_token %}
+    				<div>
+    					<label for="id_username">E-mail</label>
+    					<div class="border-left regular">
+    						<div class="border-right">
+    							<input id="id_username" type="text" name="username"/>
+    						</div>
+    					</div>
+                        <label for="id_username">Senha</label>
+    					<div class="border-left ">
+    						<div class="border-right regular">
+    							<input id="id_password" type="password" name="password"/>
+    						</div>
+    					</div>
+    					<div class="submit-left">
+    						<div class="submit-right">
+    						    <input type="hidden" name="next" value="{{ request.GET.next|default:'/' }}" />
+    							<input type="submit" value="LOGAR" />
+    						</div>
+    					</div>
+    				</div>
+    			</form>
+    			<div class="clear"></div>
+    		</div>
+    		<div class="contact">
+    			<h4>Vantagens de ser cadastrado</h4>
+    			<p>Cadastre-se em nosso site e aproveite vantagens incríveis: Descontos exclusivos, dicas e vídeos de diversas áreas, os melhores lugares e profissionais de sua cidade e bairro. Tudo isso entre uma infinidade de outras vantagens.E o melhor de tudo. É GRÁTIS! Cadastre-se e comprove!</p>
+    			<a class="register" href="{% url customer_registration %}">CADASTRE-SE</a>
+    		</div>
+    		<div class="clear"></div>
+    	</div>
+    </div>
+{% endblock %}

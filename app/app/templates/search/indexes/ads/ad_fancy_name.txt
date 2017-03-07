@@ -1,0 +1,37 @@
+{{ object.fancy_name }}
+{{ object.category.name }}
+{{ object.description }}
+
+{% for activities in object.activities.all %}
+    {{ activities.name }}
+{% endfor %}
+
+{% for activities in object.option_values.all %}
+    {{ option_values.name }}
+{% endfor %}
+
+{% for activities in object.payment.all %}
+    {{ payment.name }}
+{% endfor %}
+
+{{ object.zip_code }}
+{{ object.number }}
+{{ object.street }}
+{{ object.get_state_display }}
+{{ object.city.name }}
+{{ object.area.name }}
+{{ object.time_working }}
+{{ object.get_type_ad_display }}
+
+{% for promotion in object.promotion_set.all %}
+    {% if promotion.promotion_active %}
+        {{ promotion.title }}
+        {{ promotion.description }}
+        {{ promotion.rules }}
+        {{ promotion.discount }}
+        {{ promotion.price }}
+        {{ promotion.discouted_price }}
+        {{ promotion.start_date }}
+        {{ promotion.end_date }}
+    {% endif %}
+{% endfor %}

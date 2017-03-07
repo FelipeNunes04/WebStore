@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load thumbnail youtubizer str_tags %}
+{% block id %}home{% endblock %}
+{% load humanize %}
+{% block carrousel %}
+    <div id="carousel">
+        <a href="#" class="prev" title="Anterior"></a>
+        <ul>
+            {% for image in carousel_home %}
+                <li>
+                    <a href= "{{ image.link }}" {% if image.target %}target="_blank"{% endif %}>
+                        <img src="{% thumbnail image.img 330x214 crop %}" alt="{{ image.name }}" />
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="#" class="next" title="Próximo"></a>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div id="top-ten">
+    	<h2>Top 11</h2>
+    	<div class="top-ten-skin">
+    		<ul class="top-ten-skin">
+    			{% for top in top_ten %}
+        			<li>
+        				<a href="{% url ads_detail_view slug=top.slug %}"><img src="{% thumbnail top.image 250x171 crop %}" alt="{{ top.fancy_name }}" /></a>
+        				<h3><a href="{% url ads_detail_view slug=top.slug %}">{{ top.fancy_name }}</a></h3>
+        				<p><a href="{% url ads_detail_view slug=top.slug %}">{{ top.description|truncatewords:25 }}</a></p>
+        			</li>
+        		{% endfor %}
+    		</ul>
+    		<div class="clear"></div>
+    	</div>
+    	<div class="arrows">
+    		<span class="prev" title="anterior">Anterior</span>
+    		<span class="next" title="Próximo">Próximo</span>
+    	</div>
+    </div>
+
+    <div class="column">
+        <h3>Últimas Dicas</h3>
+        <div id="last-news">
+    		<ul>
+    		    {% for last_news in last_news %}
+        			<li>
+        				<a href="{% url entry_detail slug=last_news.slug %}"><img src="{% thumbnail last_news.img_display 194x78 crop %}" alt="{{ last_news.title }}" width="200" height"78" /></a>
+        				<p><a href="{% url entry_detail slug=last_news.slug %}">{{ last_news.title|truncatesmart:"70" }}</a></p>
+        			</li>
+    			{% endfor %}
+    		</ul>
+    		<div class="arrows">
+    			<span class="prev" title="anterior">Anterior</span>
+    			<span class="next" title="Próximo">Próximo</span>
+    		</div>
+    	</div>
+    	<div id="channel">
+    	<h3>TV Virtualia</h3>
+    		<ul>
+    		    {% for video in last_videos %}
+    			    <li>
+    			        <a href="{% url video_detail_view slug=video.slug %}"><img src="{% thumbnail video.image 200x125 crop %}" alt="{{ video.title }}"></a>
+    			        <p><a href="{% url video_detail_view slug=video.slug %}">{{ video.title|truncatesmart:"35" }}</a></p>
+    			    </li>
+    		    {% endfor %}
+
+    		</ul>
+    		<div class="arrows">
+    			<span class="prev" title="anterior">Anterior</span>
+    			<span class="next" title="Próximo">Próximo</span>
+    		</div>
+    	</div>
+    	<div class="clear"></div>
+    </div>
+
+    <div id="featured" class="topics">
+    	<h3 class="{% if qs_promotions %}y{% else %}large{% endif %}">Destaques</h3>
+        {% if qs_promotions %}
+            <h3 class="x">Promoções <a href="{% url all_promotions %}">Ver Todos</a></h3>
+        {% else %}
+        {% endif %}
+
+    	<ul class="{% if qs_promotions %}y{% else %}large{% endif %}"> {# Destaques #}
+    	    {% for top_news in news_more_views %}
+        		<li>
+        			<a class="img" href="{% url entry_detail slug=top_news.slug %}"><img src="{% thumbnail top_news.img_display 70x70 crop %}" alt="{{ top_news.title }}" width="70" height"70" /></a>
+        			<h4><a href="{% url entry_detail slug=top_news.slug %}">{{ top_news.title|truncatesmart:"23" }}</a></h4>
+        			<p><a href="{% url entry_detail slug=top_news.slug %}">{{ top_news.brief|truncatesmart:"40" }}</a></p>
+        			<div class="clear"></div>
+        		</li>
+    		{% endfor %}
+    	</ul>
+        {% if qs_promotions %}
+            <ul class="x"> {# Cupons de Desconto #}
+                {% for promotion in qs_promotions %}
+                    <li>
+                        <a class="img" href="{% url my_promotion_detail pk=promotion.pk %}"><img src="{% if promotion.image %}{% thumbnail promotion.image 70x70 crop %} {% else %} {% thumbnail promotion.ad.image 70x70 crop %} {% endif %}" alt="{{ top_news.title }}" width="70" height"70" /></a>
+                        <h4><a href="{% url my_promotion_detail pk=promotion.pk %}">{{ promotion.title|truncatewords:"3" }}</a></h4>
+                        <p><a href="{% url my_promotion_detail pk=promotion.pk %}">{{ promotion.description|truncatewords:"6" }}</a></p>
+
+                        {% if promotion.type_promotion == "coupon" %}
+                            <p class="promotion"><a href="{% url my_promotion_detail pk=promotion.pk %}">Cupom de desconto de {{ promotion.discount|intword }}% »</a></p>
+                        {% else %}
+                            <p class="promotion"><a href="{% url my_promotion_detail pk=promotion.pk %}">Confira o vale brinde »</a></p>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+        {% endif %}
+    </div>
+    <div class="clear"></div>
+{% endblock %}

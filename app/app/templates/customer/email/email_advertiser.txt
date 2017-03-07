@@ -1,0 +1,12 @@
+Plano: {{ plan }} 
+Número de anúncios: {{ number_ads }}
+Valor total: {{ value_signature }}
+
+Nome: {{ name }} ({{ email }})
+Empresa: {{ fancy_name }}
+Telefone: {{ area_phone }}-{{ phone }}
+          {{ area_cell_phone }}-{{ cell_phone }}
+Cidade: {{ city }} - {{ state }}
+
+--
+Enviado em {% now "d/m/Y" %} às {% now "H:i:s" %}

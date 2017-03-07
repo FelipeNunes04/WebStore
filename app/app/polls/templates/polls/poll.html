@@ -1,0 +1,17 @@
+{% if question %}
+    <div id="poll-form">
+        <form action="{% url polls_view %}" method="post">
+            {% csrf_token %}
+        	<h4>Enquete</h4>
+        	<p class="title">{{ question }}</p>
+            {% for choice in question.choice_set.all %}
+            	<label>
+            		<input type="radio" name="choice_id" id="{{ forloop.counter }}" value="{{ choice.id }}" />
+            		{{ choice }}
+            	</label>
+        	{% endfor %}
+        	<input type="hidden" name="question_id" value="{{ question.id }}">
+        	<input type="submit" value="VOTAR">
+        </form>
+    </div>
+{% endif %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Política de privacidade | {{ block.super }}{% endblock %}
+{% block rel %}{{ ad.category.slug|lower }}{% endblock %}
+{% block id %}privacy{% endblock %}
+{% block class %}text{% endblock %}
+
+{% block content %}
+    <div class="bg-bottom">
+		<p class="breadcrumb">Você está em: <a href="/">Home</a> » Política de privacidade</p>
+		<div class="article">
+			<h3>Política de Privacidade</h3>
+			<img src="{{ STATIC_URL }}img/privacy.png" alt="privacidade" />
+            <div class="text">
+                <!-- <h4>Subtítulo</h4> -->
+                {{ privacy.text|linebreaks }}
+            </div>
+			<div class="clear"></div>
+		</div>
+		<div class="article">
+            <!-- <h4>Subtítulo</h4> -->
+			<div class="column first">
+				<p></p>
+			</div>
+			<div class="column">
+				<p></p>
+			</div>
+			<div class="clear"></div>
+		</div>
+    </div>
+{% endblock %}

@@ -1,0 +1,371 @@
+{% extends "base.html" %}
+{% load thumbnail youtubizer comments locations_tags payment_tags humanize %}
+{% block title %}{{ ad.fancy_name }} | {{ block.super }}{% endblock %}
+{% block rel %}{{ ad.category.slug|lower }}{% endblock %}
+{% block id %}ad{% endblock %}
+{% block class %}search{% endblock %}
+
+{% block content %}
+	<div class="menu">
+		<h2>{{ ad.category.name }}</h2>
+		<p>{{ ad.category.description }}</p>
+    	<form id="filter-form" action="{% url result_filter %}" method="get">
+    		<fieldset class="activities">
+    			<legend>Refine sua busca:</legend>
+    			<label class="border-top"><img src="{{ STATIC_URL }}img/bg/bg_marker_menu.png"> SEÇÃO</label>
+    			<input type="hidden" name="category" value="{{ ad.category.id }}" id="id_category" />
+    			<ul class="ul-activity">
+    				{% for activity in list_activity %}
+    				<li>
+    					<label class="inner" for="id_activity{{ activity.id }}"><input type="checkbox" id="id_activity{{ activity.id }}" value="{{ activity.id }}" name="activity"><img src="{{ STATIC_URL }}img/bg/bg_marker_menu_1.png"> {{ activity.name }}</label>
+    					{% if activity.option_groups.exists %}
+    						<ul class="ul-option">
+    							{% for option in activity.option_groups.all %}
+    								<li class="option"><span class="close"> - {{ option.name }} </span>
+    									<ul class="ul-optionvalue">
+    										{% for value in option.optionvalue_set.all %}
+    									        <li class="li-value" ><label for="id_{{ value.option_group }}{{ value.id }}"><input type="checkbox" id="id_{{ value.option_group }}{{ value.id }}" value="{{ value.id }}" name="option-value">{{ value.name }}</label></li>
+    										{% endfor %}
+    									</ul>
+    								</li>
+    							{% endfor %}
+    						</ul>
+    					{% endif %}
+    				</li>
+    				{% endfor %}
+    			</ul>
+    			<span class="border-bottom"></span>
+    			<div class="locale">
+    				 {% if qs_list_area %}
+    					<label class="border-top">» BAIRRO</label>
+    					<ul>
+    						{% for l in qs_list_area %}
+    							<li><label for="id_locale{{ l.id }}"><input type="checkbox" id="id_locale{{ l.id }}" value="{{ l.id }}" name="area"><img src="{{ STATIC_URL }}img/bg/bg_marker_menu_1.png">{{ l.area }}</label></li>
+    						{% endfor %}
+    					</ul>
+    					<span class="border-bottom"></span>
+    				{% else %}
+    					<label class="border-top"><img src="{{ STATIC_URL }}img/bg/bg_marker_menu.png"> LOCAL</label>
+    					<ul>
+    						{% get_root_city as search_city %}
+    						{% for l in search_city %}
+    							<li><label for="id_locale{{ l.id }}"><input type="checkbox" id="id_locale{{ l.id }}" value="{{ l.id }}" name="locale"><img src="{{ STATIC_URL }}img/bg/bg_marker_menu_1.png"><img src="{{ STATIC_URL }}img/bg/bg_marker_menu_1.png">{{ l.name }}</label></li>
+    						{% endfor %}
+    					</ul>
+    					<span class="border-bottom"></span>
+    				{% endif %}
+    			</div>
+    			<div class="payment">
+    				<label class="border-top"><img src="{{ STATIC_URL }}img/bg/bg_marker_menu.png"> FORMAS DE PAGAMENTO</label>
+    				<ul>
+    					{% get_root_payment as search_payment for list_ads %}
+    					{% for p in search_payment %}
+    						<li><label for="id_payment{{ p.id }}"><input type="checkbox" id="id_payment{{ p.id }}" value="{{ p.id }}" name="payment"><img src="{{ STATIC_URL }}img/bg/bg_marker_menu_1.png">{{ p.name }}</label></li>
+    					{% endfor %}
+    				</ul>
+    				<span class="border-bottom"></span>
+    			</div>
+    		</fieldset>
+    	</form>
+		{% include "appsite/facebook.html" %}
+	</div>
+	<div class="bg-top">
+		<div class="bg-bottom">
+			<div class="article">
+				<div class="banner">
+					<p class="breadcrumb">Você está em: <a href="/">Home</a> » <a href="{% url category_detail_view slug=ad.category.slug %}">{{ ad.category }}</a> » {{ ad.fancy_name }} </p>
+					{% if messages %}
+						{% for message in messages %}
+						<p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+						{% endfor %}
+					{% endif %}
+				</div><!-- banner -->
+				<div class="text">
+					<div class="border">
+						<div class="content">
+							<div class="logo">
+								<img src="{% thumbnail ad.image 194x194 %}" alt="{{ ad.slug }}"/>
+							</div>
+							<h2>{{ ad.fancy_name }}</h2>
+							<div class="p">
+								{{ ad.description|linebreaks }}
+							</div>
+							<div class="links">
+								{% if ad.site %}<span>Acesse: <a href="{{ ad.site }}" target="_blank">{{ ad.site }}</a></span>{% endif %}
+								{% if ad.twitter or ad.facebook %}
+								<span>Redes sociais:</span>
+								<ul>
+									{% if ad.twitter %}<li><a target="_blank" href="{{ ad.twitter }}" class="twitter" target="_blank">Twitter</a></li>{% endif %}
+									{% if ad.facebook %}<li><a href="{{ ad.facebook }}" class="facebook" target="_blank">Facebook</a></li>{% endif %}
+								</ul>
+								{% endif %}
+							</div>
+							<div class="share">
+								<iframe src="http://www.facebook.com/plugins/like.php?app_id=108920949206604&amp;href={{ request.build_absolute_uri }}&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=true&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:94px; height:20px;" allowTransparency="true"></iframe>
+
+								<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-text="Virtuallia | {{ ad.fancy_name }}">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+							</div>
+							<div class="clear"></div>
+						</div><!-- content -->
+					</div><!-- bg-bottom -->
+				</div><!-- text -->
+				{% if qs_coupons %}
+				<div class="results coupons">
+					<h3>Cupons de Desconto - <span class="actual">1</span><span class="total">/{{ qs_coupons.count }}</span></h3>
+					<ul class="results promotion {% if qs_coupons.count > 1 %}carousel-coupon{% endif %}">
+						{% for promotion in qs_coupons %}
+							<li class="{% cycle 'odd' 'even' %}">
+								<div class="img-logo">
+									{% if promotion.image %}
+										<img src="{% thumbnail promotion.image 97x75 %}" alt="{{ promotion.title }}"/>
+									{% else %}
+										<img src="{% thumbnail ad.image 97x75 %}" alt="{{ promotion.title }}"/>
+									{% endif %}
+								</div>
+								<div class="text">
+									<h2>{{ promotion.title }}</h2>
+									<p>{{ promotion.description|truncatewords:15 }}</p>
+									<a href="{% url my_promotion_detail pk=promotion.pk %}">IMPRIMIR CUPOM</a>
+								</div>
+								{% if promotion.discount %}
+									<div class="img-banner">
+		        						<span class="percentage">{{ promotion.discount|intword }}% </span><span>off</span>
+		        					</div>
+	        					{% endif %}
+							</li>
+						{% endfor %}
+					</ul>
+					{% if qs_coupons.count > 1 %}
+						<div class="arrows arrows-coupons"> <span class="prev">Anterior</span><span class="next">Próximo</span> </div>
+					{% endif %}
+				</div>
+				{% endif %}
+				{% if qs_valley_toast %}
+				<div class="results valley">
+					<h3>Vale Brinde - <span class="actual">1</span><span class="total">/{{ qs_coupons.count }}</span></h3>
+					<ul class="results valley {% if qs_valley_toast.count > 1 %}carousel-valley{%endif%}">
+						{% for promotion in qs_valley_toast %}
+							<li class="{% cycle 'odd' 'even' %}">
+								<div class="img-logo">
+									{% if promotion.image %}
+										<img src="{% thumbnail promotion.image 97x75 %}" alt="{{ promotion.title }}"/>
+									{% else %}
+										<img src="{% thumbnail ad.image 97x75 %}" alt="{{ promotion.title }}"/>
+									{% endif %}
+								</div>
+								<div class="text">
+									<h2>{{ promotion.title }}</h2>
+									<p>{{ promotion.description|truncatewords:15 }}</p>
+									<a href="{% url my_promotion_detail pk=promotion.pk %}">IMPRIMIR VALE-BRINDE</a>
+								</div>
+								<div class="img-banner">
+		        					<span class="percentage">Vale </span><span>Brinde</span>
+		        				</div>
+							</li>
+						{% endfor %}
+					</ul>
+					{% if qs_valley_toast.count > 1 %}
+						<div class="arrows arrows-valley"> <span class="prev">Anterior</span> <span class="next">Próximo</span> </div>
+					{% endif %}
+				</div>
+				{% endif %}
+				<div class="clear"></div>
+				<div id="gallery">
+					<h3>Galeria de fotos</h3>
+					<ul>
+						{% for photo in ad.photo_set.all %}
+							<li><a class="lightbox-gallery" href="{{ photo.photo.url }}" title="{{ photo.name }}" rel="galeria"><img src="{% thumbnail photo.photo 100x86 crop %}" alt="{{ photo.name }}" /></a></li>
+						{% endfor %}
+					</ul>
+				</div>
+				{% if ad.video %}
+					<div id="video">
+						<h3>Vídeo</h3>
+						{{ ad.video|youtubize:"275x170"|safe }}
+						<!-- <iframe width="275" height="170" src="http://www.youtube.com/embed/{{ ad.video }}" frameborder="0" allowfullscreen></iframe> -->
+					</div>
+				{% endif %}
+				<div id="contact">
+					<h3>Entre em contato</h3>
+					<div class="address">
+						<p>
+							<span>{{ ad.street }}, {{ ad.number }}, {{ ad.complement}} {{ ad.area.area }}</span>
+							<span>{{ ad.zip_code }} - {{ ad.city.city }} - {{ ad.state }}{% if ad.country %}, {{ ad.country }}{% endif %}</span>
+						</p>
+						{% if ad.time_working %}
+							<p class="time_working" >
+								<span>{{ ad.time_working|linebreaks }}</span>
+							</p>
+						{% endif %}
+					</div>
+					<div id="map">
+						<div id="map-canvas" rel="{{ ad.street }}, {{ ad.number }}, {{ ad.city.city }}, {{ ad.state }}{% if ad.country %}, {{ ad.country }}{% endif %}">
+							<img src="http://maps.google.com/maps/api/staticmap?center=Avenida+Presidente+Vargas,2121,Ribeirao+Preto,SP&amp;zoom=14&amp;size=125x130&amp;maptype=roadmap&markers=-21.206029,-47.810933&amp;sensor=false">
+						</div>
+					</div>
+					<form method="post">
+						{% csrf_token %}
+						<div id="contact-form">
+							{{ form_contact.name.label_tag }}{{ form_contact.name.errors }}
+							<div class="border-left">
+								<div class="border-right">
+									{{ form_contact.name }}
+								</div>
+							</div>
+							{{ form_contact.email.label_tag }}
+							{{ form_contact.email.errors }}
+							<div class="border-left">
+								<div class="border-right">
+									{{ form_contact.email }}
+								</div>
+							</div>
+							{{ form_contact.phone.label_tag }}
+							{{ form_contact.phone.errors }}
+							<div class="border-left">
+								<div class="border-right">
+									{{ form_contact.phone }}
+								</div>
+							</div>
+							{{ form_contact.city.label_tag }}
+							{{ form_contact.city.errors }}
+							<div class="border-left">
+								<div class="border-right">
+									{{ form_contact.city }}
+								</div>
+							</div>
+							<div class="textarea">
+								<label for="id_message">{{ form_contact.message.label_tag }}</label>
+								{{ form_contact.message.errors }}
+								{{ form_contact.message }}
+							</div>
+							<div class="submit-left">
+								<div class="submit-right">
+									<input type="hidden" value="form_contact" />
+									<input type="submit" name="submit-contact" value="ENVIAR MENSAGEM" />
+								</div>
+							</div>
+						</div>
+					</form>
+					<div class="clear"></div>
+				</div>
+				<div class="indicate">
+				<h3>Indique para um amigo</h3>
+				{% if form_indicate.errors %} <span class="errorlist">Todos campos são obrigatórios</span>{% endif %}
+					<form method="post">
+						{% csrf_token %}
+
+						<div>
+							<label class="my" for="id_my_name">Seu nome</label>
+							<div class="border-left">
+								<div class="border-right">
+									{{ form_indicate.my_name}}
+								</div>
+							</div>
+							<label for="id_friend_name">Nome do seu amigo</label>
+
+							<div class="border-left">
+								<div class="border-right">
+									{{ form_indicate.friend_name }}
+								</div>
+							</div>
+							<label class="my" for="id_my_email">Seu email</label>
+
+							<div class="border-left">
+								<div class="border-right">
+									{{ form_indicate.my_email }}
+								</div>
+							</div>
+							<label for="id_friend_email">Email do seu amigo</label>
+
+							<div class="border-left">
+								<div class="border-right">
+									{{ form_indicate.friend_email }}
+								</div>
+							</div>
+							<input type="hidden" value="form-indicate"/>
+							<input type="submit" value="ENVIAR" name="submit-indicate"/>
+							<div class="clear"></div>
+						</div>
+
+					</form>
+				</div>
+				<div class="comments">
+					<h3>Comentários</h3>
+					<ul>{% get_comment_list for ad as comment_list %}
+						{% for comments in comment_list %}
+						<li>
+							{% if comments.user.get_profile.image %}
+									<img src="{% thumbnail comments.user.get_profile.image 45x45 crop='smart' %}" alt="avatar do usuario"/>
+								{% else %}
+									<img src="{{ STATIC_URL }}img/avatar.jpg" alt="avatar do usuario"/>
+								{% endif %}
+							<div class="user">
+								<strong>{{ comments.name }}</strong>
+								<span>{{ comments.submit_date|date:"d/m/Y - G\hi" }}</span>
+							</div>
+							<p>{{ comments.comment|safe }}</p>
+							<div class="clear"></div>
+						</li>
+						{% endfor %}
+					</ul>
+					<ul>
+						<li>
+						{% get_comment_form for ad as form %}
+							<table>
+								<form action="{% comment_form_target %}" method="post">
+									{% csrf_token %}
+									{{ form.errors }}
+									<div class="user-profile">
+										{% if user.is_authenticated %}
+												{% if user.get_profile.image %}
+													<img src="{% thumbnail user.get_profile.image 45x45 crop='smart' %}" alt="avatar do usuario"/>
+												 {% else %}
+													<img src="{{ STATIC_URL }}img/avatar.jpg" alt="avatar do usuario"/>
+												 {% endif %}
+												<div class="user">
+													<strong id="name">{{ user.first_name }}</strong>
+												</div>
+												<div class="email">
+													<strong>{{ user.email }}</strong>
+												</div>
+												<input type="hidden" value="{{ user.first_name }}"/>
+												<input type="hidden" value="{{ user.email }}"/>
+										{% else %}
+											<img src="{{ STATIC_URL }}img/avatar.jpg" alt="avatar do usuario"/>
+											<div class="user">
+												{{ form.name.label_tag }}
+												<span class="id_name"></span>{{ form.name }}<br />
+											</div>
+											<div class="email">
+												{{ form.email.label_tag }}
+												<span class="id_email"></span>{{ form.email }}
+											</div>
+										{% endif %}
+									</div>
+									<div class="comment-ad">
+										{{ form.comment.label_tag }}
+										<p>{{ form.comment }}</p>
+										{{ form.honeypot }}
+										{{ form.content_object }}
+										{{ form.content_type }}
+										{{ form.object_pk }}
+										{{ form.timestamp }}
+										{{ form.security_hash }}
+										{{ content_type }}
+										<div class="clear"></div>
+									</div>
+									<tr>
+										<td colspan="2">
+											<input type="hidden" name="next" value="{% url ads_detail_view ad.slug %}" />
+											<input type="submit" name="submit" value="POSTE SEU COMENTÁRIO">
+										</td>
+									</tr>
+								</form>
+							</table>
+						</li>
+					</ul>
+				</div>
+			</div><!-- div.article -->
+		</div><!-- div.bg-bottom -->
+	</div><!-- div.bg-top -->
+{% endblock %}

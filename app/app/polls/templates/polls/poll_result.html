@@ -1,0 +1,10 @@
+<div id="poll-form">
+    <h4>Resultado da Enquete</h4>
+    {% if created == '0' %}
+        <p class="warning">Você pode votar apenas uma vez em cada enquete.</p>
+    {% endif %}
+    <p class="title">{{ question }}</p>
+    {% for q in question.choice_set.all %}
+        <p class="poll-result">{{ q.choice }} - {{ q.votes }} votos </p>
+    {% endfor %}
+</div>
