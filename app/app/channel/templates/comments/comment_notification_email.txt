@@ -1,9 +1,0 @@
-Comentário: {{ comment.comment }}
-
-no video: {{ comment.content_object }}, categoria:{{ comment.content_object.category }}
-
-Comentário enviado: {{ comment.submit_date|date:"d/m/Y - G\hi"}}
-Por: {{ comment.name }} ({{ comment.email }})
-
-__
-Enviado em {% now "d/m/Y" %} às {% now "H:i:s" %}

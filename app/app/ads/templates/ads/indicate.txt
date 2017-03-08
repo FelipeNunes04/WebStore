@@ -1,7 +1,0 @@
-Olá {{ instance.friend_name }}, seu amigo {{ instance.my_name }},
-lhe indicou o site www.virtuallia.com.br{{ url }}
-
-Venha fazer uma visita {{ ad.fancy_name }}
-
---
-Enviado em {% now "d/m/Y" %} às {% now "H:i:s" %}

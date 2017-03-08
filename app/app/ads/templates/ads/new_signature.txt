@@ -1,8 +1,0 @@
-Plano: {{ signature.plan }}
-Quantidade de anuncios: {{ signature.number_ads }}
-Valor total: {{ signature.value_signature }}
-
-anunciante {{ signature.customer.name }} ({{ signature.customer.email}})
-
---
-Enviado em {% now "d/m/Y" %} às {% now "H:i:s" %}

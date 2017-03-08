@@ -1,9 +1,0 @@
-Comentário: {{ ad.comment.comment }}
-
-no anúncio: {{ comment.content_object }}
-
-Comentário enviado: {{ comment.submit_date|date:"d/m/Y - G\hi"}}
-Por: {{ comment.name }} ({{ comment.email }})
-
-__
-Enviado em {% now "d/m/Y" %} às {% now "H:i:s" %}
